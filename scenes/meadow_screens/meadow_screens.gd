@@ -723,7 +723,8 @@ func _bark() -> void:
 	var id: String = ids[n % ids.size()]
 	var barks: Array = defs.get(id, {}).get("barks", [])
 	if not barks.is_empty():
-		hud.toast("%s: %s" % [Content.name_of(id), Content.text(str(barks[(n / ids.size()) % barks.size()]))])
+		hud.toast("%s: %s" % [Content.name_of(id), Content.text(str(barks[(n / ids.size()) % barks.size()]))],
+			Rules.num("screens.hero_bark_seconds", 6.0))
 
 
 func _process(_delta: float) -> void:

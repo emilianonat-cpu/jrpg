@@ -65,9 +65,9 @@ func set_prompt(text: String) -> void:
 	prompt_label.text = text
 
 
-func toast(text: String) -> void:
+func toast(text: String, seconds: float = -1.0) -> void:
 	toast_label.text = text
-	_toast_time = 2.5
+	_toast_time = seconds if seconds > 0.0 else Rules.num("ui.toast_seconds", 2.5)
 
 
 func _process(delta: float) -> void:

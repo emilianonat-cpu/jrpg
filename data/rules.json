@@ -13,10 +13,11 @@
 		"font_size": 6,
 		"text_color": "#f4f0e6",
 		"line_spacing": 0,
-		"battle_log_delay": 0.9,
-		"hero_cursor_step": 0.12,
+		"battle_log_delay": 1.6,
+		"hero_cursor_step": 0.3,
 		"slime_panel_text_color": "#2a2420",
-		"show_task_list": false
+		"show_task_list": false,
+		"toast_seconds": 2.5
 	},
 	"clock": {
 		"_comment": "6:00-18:00 in about 6-8 real minutes",
@@ -43,6 +44,15 @@
 		"reset_task_progress": false
 	},
 	"battle": {
+		"unlock": {
+			"_comment": "Novecento's trust needed for each of Slayme's verbs. Locked verbs are not shown. 0 = known from the start.",
+			"defend": 0,
+			"look": 2,
+			"flee": 2,
+			"hide": 5,
+			"call_help": 5,
+			"absorb": 6
+		},
 		"minutes_per_round": 3,
 		"min_damage": 0,
 		"slime": {
@@ -139,6 +149,7 @@
 		"spot_radius": 22,
 		"hero_warning_minutes": 20,
 		"focus_padding": 4,
-		"hero_cross_seconds_min": 6
+		"hero_cross_seconds_min": 16,
+		"hero_bark_seconds": 6
 	}
 }

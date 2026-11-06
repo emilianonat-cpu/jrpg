@@ -136,6 +136,27 @@ func _test_battle() -> void:
 		rounds += 1
 	check(m.outcome == "bored", "hiding until the heroes get bored (%d rounds)" % rounds)
 	Rules.clear_override("battle.terrain.consumed_on_hide")
+	# Verbs come one at a time with Novecento's trust.
+	var saved_trust := GameState.trust
+	var saved_flags: Dictionary = GameState.flags.duplicate(true)
+	GameState.trust = 0
+	GameState.flags.erase("verbs_known")
+	m = BattleModel.new()
+	m.setup(party, ["bush"], "")
+	check(m.verbs().map(func(v): return v.id) == ["defend"], "trust 0: Slayme only knows how to brace")
+	check(m.take_new_verbs().size() == 1 and m.take_new_verbs().is_empty(), "new verbs are told once")
+	rounds = 0
+	while m.outcome == "" and rounds < 10:
+		m.plan_round()
+		m.resolve("defend")
+		rounds += 1
+	check(m.outcome == "incident" and rounds == 4, "bracing only: the incident comes with Brave Slash (round %d)" % rounds)
+	GameState.trust = Rules.integer("battle.unlock.flee")
+	var ids: Array = m.verbs().map(func(v): return v.id)
+	check(ids.has("look") and ids.has("flee") and not ids.has("hide"), "more trust: look around and run away")
+	check(m.take_new_verbs().size() == 2, "two new verbs to tell")
+	GameState.trust = saved_trust
+	GameState.flags = saved_flags
 	# Mud: heavy, cannot flee.
 	m = BattleModel.new()
 	m.setup(party, ["mud"], "")
@@ -223,6 +244,9 @@ func _autopilot(main: Node) -> void:
 		var verbs: ChoiceList = battle.verbs
 		if verbs.active:
 			var want := "look" if battle.model.round_no == 1 else ("defend" if battle.model.round_no == 2 else "flee")
+			var ids: Array = verbs.items.map(func(it): return str(it.id))
+			if not ids.has(want):
+				want = "defend"   # verbs come with trust: early on, bracing is all Slayme knows
 			for i in verbs.items.size():
 				if verbs.items[i].id == want:
 					verbs.chosen.emit(want, i)
@@ -329,6 +353,9 @@ func _screens_autopilot(main: Node) -> void:
 		var verbs: ChoiceList = battle.verbs
 		if verbs.active:
 			var want := "look" if battle.model.round_no == 1 else ("defend" if battle.model.round_no == 2 else "flee")
+			var ids: Array = verbs.items.map(func(it): return str(it.id))
+			if not ids.has(want):
+				want = "defend"   # verbs come with trust: early on, bracing is all Slayme knows
 			for i in verbs.items.size():
 				if verbs.items[i].id == want:
 					verbs.chosen.emit(want, i)

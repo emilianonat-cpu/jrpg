@@ -83,6 +83,10 @@ func _run() -> void:
 	var bark := _battle_bark()
 	if bark != "":
 		await _say(bark)
+	var first_time := not GameState.flags.has("verbs_known")
+	for label in model.take_new_verbs():
+		if not first_time:
+			await _say(Content.text("battle.log.new_verb", {"verb": label}))
 	while model.outcome == "":
 		model.plan_round()
 		await _show_hero_menus()
