@@ -102,6 +102,7 @@
 		},
 		"terrain": {
 			"consumed_on_absorb": true,
+			"consumed_on_hide": true,
 			"mud": {
 				"defense_bonus": 1
 			}

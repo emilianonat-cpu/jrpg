@@ -356,6 +356,8 @@ func _verb_hide(arg: String, ev: Array) -> void:
 	slime.hidden = true
 	_hid_this_round = true
 	_log(ev, "battle.log.hide", {"thing": terrain_label(arg)})
+	if Rules.flag("battle.terrain.consumed_on_hide", true):
+		terrain.erase(arg)   # a cover works once per battle
 
 
 func _verb_call_help(_arg: String, ev: Array) -> void:

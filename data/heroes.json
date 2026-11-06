@@ -5,6 +5,7 @@
 			"art_world": "hero_sword",
 			"art_battle": "hero_sword_battle",
 			"pattern": [
+				"pose",
 				"attack",
 				"prepare_brave",
 				"brave_slash"
@@ -19,6 +20,7 @@
 			"art_world": "hero_mage",
 			"art_battle": "hero_mage_battle",
 			"pattern": [
+				"focus",
 				"fire",
 				"fire",
 				"thunder"

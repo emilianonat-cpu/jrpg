@@ -127,9 +127,24 @@ sprite("path_pot_broken", box(8, 4, (130, 85, 60)), offset=[0, 2])
 sprite("home_sign", box(10, 14, MUTED["wood"], label_band=MUTED["paper"]), offset=[0, -4])
 
 # --- items (seen through Slayme's jelly body) ---
+# 6x6 with a dark outline: readable through the jelly at 320x180.
+def item_icon(shape, color):
+    img = Image.new("RGBA", (6, 6), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    edge = (50, 40, 35)
+    if shape == "shard":
+        d.polygon([(0, 5), (2, 0), (5, 2), (4, 5)], fill=color, outline=edge)
+    elif shape == "coin":
+        d.ellipse([0, 0, 5, 5], fill=color, outline=edge)
+    elif shape == "seed":
+        d.ellipse([1, 0, 4, 5], fill=color, outline=edge)
+    else:
+        d.rectangle([0, 0, 5, 5], fill=color, outline=edge)
+    return img
+
+
 for item, color in [("shard", MUTED["pot"]), ("coin", MUTED["coin"]), ("seed", MUTED["seed"]),
                     ("mud", MUTED["mud"]), ("spores", (200, 220, 255))]:
-    sprite("item_" + item, box(4, 4, color))
+    sprite("item_" + item, item_icon(item, color))
 
 # --- missing: magenta, shows any id the pack lacks ---
 sprite("missing", box(8, 8, (255, 0, 255)))
@@ -243,6 +258,11 @@ def pot_stage(n, total, color=MUTED["pot"], glue=False):
     img = Image.new("RGBA", (14, 22), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
     d.rectangle([2, 14, 11, 21], fill=MUTED["stone"], outline=(110, 110, 100))   # pedestal
     h = int(13 * n / total)
+    if n < total:   # the shape of the missing pot, dotted: where the pieces go
+        for y in range(1, 14, 2):
+            d.point((3, y), fill=(200, 190, 170)); d.point((10, y), fill=(200, 190, 170))
+        for x in range(3, 11, 2):
+            d.point((x, 1), fill=(200, 190, 170))
     if h > 0:
         d.rectangle([3, 14 - h, 10, 13], fill=color, outline=(120, 70, 50))
         if glue:
@@ -258,8 +278,11 @@ for i in range(4):
     img = Image.new("RGBA", (18, 13), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
     d.rectangle([0, 2, 17, 12], fill=MUTED["wood"], outline=(90, 66, 44))
     d.rectangle([0, 0, 17, 3], fill=(150, 112, 74), outline=(90, 66, 44))
-    for c in range(i):
-        d.ellipse([3 + c * 4, 5, 6 + c * 4, 8], fill=MUTED["coin"])
+    for c in range(3):   # empty slots stay visible: where the coins go
+        if c < i:
+            d.ellipse([3 + c * 4, 5, 6 + c * 4, 8], fill=MUTED["coin"])
+        else:
+            d.ellipse([3 + c * 4, 5, 6 + c * 4, 8], outline=(70, 50, 34))
     sprite("chest_stage_%d" % i, img, offset=[0, -4])
 patch = Image.new("RGBA", (20, 10), (0, 0, 0, 0)); d = ImageDraw.Draw(patch)
 d.ellipse([0, 0, 19, 9], fill=(150, 140, 96))
@@ -307,6 +330,13 @@ manifest["sounds"]["fanfare"] = {"file": write_wav("fanfare.wav", fan)}
 random.seed(1)
 hit = [random.uniform(-1, 1) * math.exp(-12 * t / rate) * 0.5 for t in range(int(rate * 0.2))]
 manifest["sounds"]["hit"] = {"file": write_wav("hit.wav", hit)}
+# absorb: a short wet "blup" sliding down; deliver: a small two-note "tok-tik"
+blup = [0.5 * math.sin(2 * math.pi * (420 - 260 * t / (rate * 0.14)) * t / rate) * (1 - t / (rate * 0.14)) for t in range(int(rate * 0.14))]
+manifest["sounds"]["absorb"] = {"file": write_wav("absorb.wav", blup)}
+tok = []
+for f in [660, 990]:
+    tok += [0.4 * math.sin(2 * math.pi * f * t / rate) * math.exp(-18 * t / rate) for t in range(int(rate * 0.09))]
+manifest["sounds"]["deliver"] = {"file": write_wav("deliver.wav", tok)}
 
 # icon
 icon = blob(64, 52, MUTED["slime"], eyes=False)

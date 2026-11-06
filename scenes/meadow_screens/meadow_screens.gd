@@ -130,6 +130,9 @@ func show_location(id: String, from: String = "") -> void:
 		var seg := _segment_now(p)
 		if not seg.is_empty() and str(seg.location) == location_id:
 			_spawn_walker(p, seg)
+	if str(day.flags.get("pot_broken_unseen", "")) == id:
+		day.flags.erase("pot_broken_unseen")
+		hud.toast(Content.text("world.pot_broken_found"))
 	Hooks.emit("location.entered", {"id": id, "screen": self})
 
 
@@ -353,6 +356,7 @@ func _use_pickup(o: WorldObject) -> void:
 	var r := day.take_pickup(o.object_id(), str(o.data.task))
 	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
 	if r.ok:
+		Art.play_sound("absorb")
 		o.visible = false
 		o.queue_free()
 		focus = null
@@ -361,6 +365,8 @@ func _use_pickup(o: WorldObject) -> void:
 func _use_source(o: WorldObject) -> void:
 	var r := day.absorb(str(o.data.task))
 	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
+	if r.ok:
+		Art.play_sound("absorb")
 
 
 func _use_sink(o: WorldObject) -> void:
@@ -372,6 +378,8 @@ func _use_sink(o: WorldObject) -> void:
 		r = day.release(task_id)
 	var title := Content.text(str(day.task(task_id).get("def", {}).get("title", "")))
 	hud.toast(Content.text(r.msg, {"title": title}))
+	if r.ok:
+		Art.play_sound("deliver")
 	_refresh_object(o)
 	if r.get("completed", false) and bool(day.task(task_id).def.get("leftover", false)):
 		GameState.award("leftover_finished")
@@ -673,6 +681,8 @@ func _heroes_enter(p: Dictionary, seg: Dictionary) -> void:
 					Art.play_sound("hit")
 					hud.toast(Content.text("world.pot_broken_toast"))
 					_rebuild()
+				else:
+					day.flags["pot_broken_unseen"] = loc   # told when Slayme comes back here
 	if loc == location_id:
 		if cover_id != "":
 			GameState.award("hid_before_heroes")
@@ -756,7 +766,8 @@ func _after_battle(res: Dictionary) -> void:
 		_consume_incident_slot()
 	if str(res.get("item", "")) != day.carried:
 		if str(res.get("item", "")) == "":
-			day.set_carried("", "")   # stolen: gone for good today
+			day.put_back()   # stolen: it turns up again where it was picked up
+			day.flags["_rebuild"] = true
 		else:
 			day.set_carried(str(res.item), "")
 	var p: Dictionary = walker.get_meta("pass", {}) if walker != null else {}

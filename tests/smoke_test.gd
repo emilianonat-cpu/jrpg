@@ -78,22 +78,30 @@ func _test_day_state() -> void:
 func _test_battle() -> void:
 	print("battle")
 	var party := ["hero_sword", "hero_mage", "hero_thief"]
-	# Doing nothing useful: incident on the first round.
+	# Round 1 is the heroes' warm-up (pose, focus): looking around is safe.
 	var m := BattleModel.new()
 	m.setup(party, [], "")
 	m.plan_round()
+	check(m.plans["hero_sword"] == "pose" and m.plans["hero_mage"] == "focus", "round 1: the heroes warm up")
 	m.resolve("look")
-	check(m.outcome == "incident", "looking around on round 1 = incident")
-	# Brace, then run while the sword hero prepares.
+	check(m.outcome == "" and int(m.slime.hp) == Rules.integer("battle.slime.max_hp"), "looking around on round 1 is safe")
+	# Round 2 without defending: one normal hit of the sword hero is an incident.
+	m.plan_round()
+	check(m.plans["hero_sword"] == "attack", "sword hero attacks on round 2")
+	m.resolve("look")
+	check(m.outcome == "incident", "no defence on round 2 = incident")
+	# Look, brace, run.
 	m = BattleModel.new()
 	m.setup(party, [], "shard")
 	m.plan_round()
 	check(m.plans["hero_thief"] == "pickpocket", "thief plans to steal what Slayme carries")
-	m.resolve("defend")
-	check(m.outcome == "" and int(m.slime.hp) > 0, "bracing survives round 1")
+	m.resolve("look")
 	check(str(m.slime.item) == "", "item stolen")
 	m.plan_round()
-	check(m.plans["hero_sword"] == "prepare_brave", "sword hero prepares on round 2")
+	m.resolve("defend")
+	check(m.outcome == "" and int(m.slime.hp) > 0, "bracing survives round 2")
+	m.plan_round()
+	check(m.plans["hero_sword"] == "prepare_brave", "sword hero prepares on round 3")
 	m.resolve("flee")
 	check(m.outcome == "fled", "flee works during the preparation")
 	# Flee outside a window fails.
@@ -101,8 +109,24 @@ func _test_battle() -> void:
 	m.setup(party, ["bush"], "")
 	m.plan_round()
 	m.resolve("flee")
-	check(m.outcome == "incident", "flee on round 1 fails")
-	# Hiding until they get bored.
+	check(m.outcome == "", "flee on round 1 fails (nothing happens: warm-up)")
+	m.plan_round()
+	m.resolve("flee")
+	check(m.outcome == "incident", "flee on round 2 fails: incident")
+	# A cover works once per battle: hide, then run.
+	m = BattleModel.new()
+	m.setup(party, ["bush"], "")
+	m.plan_round()
+	m.resolve("look")
+	m.plan_round()
+	m.resolve("hide", "bush")
+	check(m.outcome == "" and int(m.slime.hp) == Rules.integer("battle.slime.max_hp"), "hiding: nobody to hit")
+	check(m.cover_terrain().is_empty(), "the cover is used up")
+	m.plan_round()
+	m.resolve("flee")
+	check(m.outcome == "fled", "hide, then run")
+	# Hiding until they get bored (only if covers are not used up).
+	Rules.set_override("battle.terrain.consumed_on_hide", false)
 	m = BattleModel.new()
 	m.setup(party, ["bush"], "")
 	var rounds := 0
@@ -111,6 +135,7 @@ func _test_battle() -> void:
 		m.resolve("hide", "bush")
 		rounds += 1
 	check(m.outcome == "bored", "hiding until the heroes get bored (%d rounds)" % rounds)
+	Rules.clear_override("battle.terrain.consumed_on_hide")
 	# Mud: heavy, cannot flee.
 	m = BattleModel.new()
 	m.setup(party, ["mud"], "")
@@ -121,9 +146,9 @@ func _test_battle() -> void:
 	m = BattleModel.new()
 	m.setup(party, [], "")
 	m.plan_round()
-	check(m.forecast("hero_mage", 2) == ["fire", "thunder"], "forecast of the mage")
+	check(m.forecast("hero_mage", 2) == ["fire", "fire"], "forecast of the mage")
 	# Mage runs out of MP after 4 spells.
-	var mage := {"id": "hero_mage", "mp": 12, "turn": 4, "asleep": false}
+	var mage := {"id": "hero_mage", "mp": 12, "turn": 5, "asleep": false}
 	m.heroes = [mage]
 	mage.mp = 0
 	check(m._pattern_action(mage) == "out_of_mp", "mage out of MP")
@@ -197,7 +222,7 @@ func _autopilot(main: Node) -> void:
 	if battle != null:
 		var verbs: ChoiceList = battle.verbs
 		if verbs.active:
-			var want := "defend" if battle.model.round_no == 1 else "flee"
+			var want := "look" if battle.model.round_no == 1 else ("defend" if battle.model.round_no == 2 else "flee")
 			for i in verbs.items.size():
 				if verbs.items[i].id == want:
 					verbs.chosen.emit(want, i)
@@ -241,6 +266,17 @@ func _test_screens_day() -> void:
 	add_child(main)
 	var meadow: Node = main.current
 	check(meadow.has_method("show_location"), "the meadow is the fixed-screen version")
+	# A theft puts the item back where it was: the job stays possible.
+	check(bool(meadow.day.take_pickup("coin_1", "chest").ok), "absorbed a coin")
+	await meadow._after_battle({"outcome": "fled", "item": ""})
+	check(meadow.day.carried == "" and not meadow.day.taken.has("coin_1"), "a stolen coin turns up again where it was")
+	# The pot broken while Slayme was away: one line when he comes back.
+	meadow.day.flags["pot_broken_unseen"] = "path"
+	meadow.show_location("path")
+	check(meadow.hud.toast_label.text == Content.text("world.pot_broken_found"), "found the pot broken again")
+	check(not meadow.day.flags.has("pot_broken_unseen"), "said once")
+	meadow.show_location("pool")
+	GameState.stats.erase("battles")
 	var planned: int = meadow.planned_incidents()
 	var battle_seen := false
 	var done_tasks := 0
@@ -292,7 +328,7 @@ func _screens_autopilot(main: Node) -> void:
 	if battle != null:
 		var verbs: ChoiceList = battle.verbs
 		if verbs.active:
-			var want := "look" if battle.model.round_no == 0 else ("defend" if battle.model.round_no == 1 else "flee")
+			var want := "look" if battle.model.round_no == 1 else ("defend" if battle.model.round_no == 2 else "flee")
 			for i in verbs.items.size():
 				if verbs.items[i].id == want:
 					verbs.chosen.emit(want, i)
