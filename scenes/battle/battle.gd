@@ -33,6 +33,8 @@ func start(party: Array, terrain_ids: Array, carried_item: String) -> void:
 	background.texture = Art.texture(str(_battle.get("background", "bg_battle_meadow")))
 	UiTheme.panel(log_panel, "panel_dialogue")
 	UiTheme.panel(slime_panel, "panel_slime")
+	UiTheme.font(hero_row, "font_heroes", "ui.font_size_heroes")
+	UiTheme.font(slime_panel, "font_slime", "ui.font_size_slime")
 	var ink := Color(Rules.text("ui.slime_panel_text_color", "#2a2420"))
 	for l in [hp_label, status_label]:
 		l.add_theme_color_override("font_color", ink)
@@ -86,15 +88,25 @@ func _run() -> void:
 	var first_time := not GameState.flags.has("verbs_known")
 	for label in model.take_new_verbs():
 		if not first_time:
+			Art.play_sound("unlock")
 			await _say(Content.text("battle.log.new_verb", {"verb": label}))
 	while model.outcome == "":
 		model.plan_round()
 		await _show_hero_menus()
 		var choice: Array = await _choose_verb()
+		Art.play_sound(_verb_sfx(choice[0]))
 		var events := model.resolve(choice[0], choice[1])
 		await _play(events)
+	Art.play_sound("battle_" + model.outcome)
 	await _wait(Rules.num("ui.battle_log_delay", 0.9))
 	battle_finished.emit(model.result())
+
+
+func _verb_sfx(verb_id: String) -> String:
+	for v in _battle.get("verbs", []):
+		if str(v.get("id", "")) == verb_id:
+			return str(v.get("sfx", ""))
+	return ""
 
 
 ## One hero says something as the fight starts (heroes.json barks).

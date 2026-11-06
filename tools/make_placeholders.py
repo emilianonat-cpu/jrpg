@@ -321,22 +321,147 @@ def write_wav(name, samples, rate=22050):
 
 
 rate = 22050
-bell = [math.exp(-3 * t / rate) * (0.6 * math.sin(2 * math.pi * 880 * t / rate) + 0.3 * math.sin(2 * math.pi * 2210 * t / rate)) for t in range(int(rate * 1.2))]
-manifest["sounds"]["bell"] = {"file": write_wav("bell.wav", bell)}
-fan = []
-for f in [523, 659, 784, 1046]:
-    fan += [0.4 * math.sin(2 * math.pi * f * t / rate) * (1 - t / (rate * 0.18)) for t in range(int(rate * 0.18))]
-manifest["sounds"]["fanfare"] = {"file": write_wav("fanfare.wav", fan)}
+# Small "MIDI-ish" instruments: marimba, kalimba, pluck, chip square, woodblock, drums.
+# Simple synthesis, written once into wav files; the game only plays files.
+
+
+def env(n, attack=0.004, decay=6.0):
+    a = max(1, int(attack * rate))
+    return [min(1.0, i / a) * math.exp(-decay * i / rate) for i in range(n)]
+
+
+def marimba(f, d=0.35, v=0.5):
+    n = int(rate * d); e = env(n, 0.002, 9)
+    return [v * e[i] * (math.sin(2 * math.pi * f * i / rate) + 0.25 * math.sin(2 * math.pi * f * 3.9 * i / rate) * math.exp(-30 * i / rate)) for i in range(n)]
+
+
+def kalimba(f, d=0.5, v=0.45):
+    n = int(rate * d); e = env(n, 0.001, 7)
+    return [v * e[i] * (math.sin(2 * math.pi * f * i / rate) + 0.4 * math.sin(2 * math.pi * f * 5.4 * i / rate) * math.exp(-40 * i / rate)) for i in range(n)]
+
+
+def pluck(f, d=0.4, v=0.5, damp=0.996):
+    n = int(rate * d); p = max(2, int(rate / f)); buf = [random.uniform(-1, 1) for _ in range(p)]; out = []
+    for i in range(n):
+        x = buf[i % p]; nxt = buf[(i + 1) % p]
+        buf[i % p] = damp * 0.5 * (x + nxt); out.append(v * x)
+    return out
+
+
+def square(f, d=0.12, v=0.22, duty=0.5, decay=4.0, slide=0.0):
+    n = int(rate * d); e = env(n, 0.002, decay); out = []; ph = 0.0
+    for i in range(n):
+        ph += (f + slide * i / n) / rate
+        out.append(v * e[i] * (1 if (ph % 1.0) < duty else -1))
+    return out
+
+
+def tri(f, d=0.2, v=0.4, decay=8.0, slide=0.0):
+    n = int(rate * d); e = env(n, 0.002, decay); out = []; ph = 0.0
+    for i in range(n):
+        ph += (f + slide * i / n) / rate
+        out.append(v * e[i] * (4 * abs((ph % 1.0) - 0.5) - 1))
+    return out
+
+
+def noise(d=0.1, v=0.4, decay=20.0, smooth=0.0):
+    n = int(rate * d); e = env(n, 0.001, decay); out = []; y = 0.0
+    for i in range(n):
+        y = smooth * y + (1 - smooth) * random.uniform(-1, 1); out.append(v * e[i] * y)
+    return out
+
+
+def drum(f, d=0.25, v=0.7, drop=0.5):
+    n = int(rate * d); e = env(n, 0.001, 14); out = []; ph = 0.0
+    for i in range(n):
+        ph += f * (1 - drop * i / n) / rate; out.append(v * e[i] * math.sin(2 * math.pi * ph))
+    return out
+
+
+def woodblock(f=900, v=0.5):
+    return mix(tri(f, 0.06, v, 60), noise(0.02, 0.15, 120, 0.3))
+
+
+def mix(*parts):
+    n = max(len(p) for p in parts); out = [0.0] * n
+    for p in parts:
+        for i, x in enumerate(p):
+            out[i] += x
+    return out
+
+
+def seq(notes, gap):
+    """notes: list of sample lists, each started gap seconds after the previous."""
+    step = int(gap * rate); n = step * (len(notes) - 1) + max(len(x) for x in notes); out = [0.0] * n
+    for k, x in enumerate(notes):
+        for i, v in enumerate(x):
+            out[k * step + i] += v
+    return out
+
+
+def snd(id, samples):
+    peak = max(1e-6, max(abs(x) for x in samples))
+    if peak > 0.95:
+        samples = [x * 0.95 / peak for x in samples]
+    manifest["sounds"][id] = {"file": write_wav(id + ".wav", samples)}
+
+
 random.seed(1)
-hit = [random.uniform(-1, 1) * math.exp(-12 * t / rate) * 0.5 for t in range(int(rate * 0.2))]
-manifest["sounds"]["hit"] = {"file": write_wav("hit.wav", hit)}
-# absorb: a short wet "blup" sliding down; deliver: a small two-note "tok-tik"
-blup = [0.5 * math.sin(2 * math.pi * (420 - 260 * t / (rate * 0.14)) * t / rate) * (1 - t / (rate * 0.14)) for t in range(int(rate * 0.14))]
-manifest["sounds"]["absorb"] = {"file": write_wav("absorb.wav", blup)}
-tok = []
-for f in [660, 990]:
-    tok += [0.4 * math.sin(2 * math.pi * f * t / rate) * math.exp(-18 * t / rate) for t in range(int(rate * 0.09))]
-manifest["sounds"]["deliver"] = {"file": write_wav("deliver.wav", tok)}
+N = {"C4": 262, "D4": 294, "E4": 330, "F4": 349, "G4": 392, "A4": 440, "B4": 494, "C5": 523, "D5": 587,
+     "E5": 659, "F5": 698, "G5": 784, "A5": 880, "C6": 1047, "G3": 196, "C3": 131, "E3": 165}
+
+# The shift bell: an electric factory bell (a hammer at ~20 Hz on a metal gong), then a time-clock "clunk".
+n = int(rate * 1.1)
+bell = []
+for i in range(n):
+    t = i / rate
+    ham = 0.55 + 0.45 * math.sin(2 * math.pi * 21 * t)
+    tone = math.sin(2 * math.pi * 1180 * t) + 0.6 * math.sin(2 * math.pi * 2710 * t) + 0.35 * math.sin(2 * math.pi * 4430 * t)
+    fade = 1.0 if t < 0.9 else max(0.0, 1 - (t - 0.9) / 0.2)
+    bell.append(0.32 * ham * tone * fade)
+bell = seq([bell, mix(drum(90, 0.18, 0.8, 0.3), noise(0.05, 0.4, 60, 0.6))], 1.05)
+snd("bell", bell)
+
+snd("fanfare", seq([square(N["G4"], 0.12), square(N["C5"], 0.12), square(N["E5"], 0.12), square(N["G5"], 0.4, decay=2)], 0.11))
+snd("hit", mix(drum(140, 0.2, 0.8), noise(0.08, 0.5, 40, 0.2)))
+
+# Work: absorb / deliver / job done / not here / spit
+snd("absorb", mix(tri(520, 0.16, 0.45, 10, slide=-300), marimba(N["E4"], 0.25, 0.25)))
+snd("deliver", seq([marimba(N["C5"], 0.3), marimba(N["G5"], 0.4)], 0.07))
+snd("done", seq([kalimba(N["C5"]), kalimba(N["E5"]), kalimba(N["G5"]), kalimba(N["C6"], 0.8)], 0.08))
+snd("nope", seq([woodblock(420), woodblock(380)], 0.09))
+snd("spit", mix(tri(260, 0.15, 0.45, 12, slide=320), noise(0.06, 0.15, 50, 0.5)))
+snd("footsteps", seq([drum(70, 0.2, 0.7, 0.2)] * 4, 0.32))
+
+# UI and voices (one short pluck per line; the mobs each have their own pitch)
+snd("ui_move", woodblock(1300, 0.25))
+snd("ui_confirm", seq([pluck(N["E5"], 0.2, 0.35), pluck(N["A5"], 0.25, 0.35)], 0.05))
+snd("ui_blip", pluck(N["A4"], 0.12, 0.3))
+snd("blip_mentor", pluck(N["G3"], 0.16, 0.4, 0.99))
+snd("blip_colleague", pluck(N["E5"], 0.1, 0.3))
+snd("blip_partner", pluck(N["C5"], 0.14, 0.3))
+snd("blip_kid", pluck(N["G5"], 0.1, 0.3))
+
+# Battle: the Heroes are loud and shiny (chip), Slayme is wood and pluck.
+snd("pose", seq([square(N["C5"], 0.08), square(N["E5"], 0.08), square(N["G5"], 0.25, decay=3)], 0.08))
+snd("focus", seq([tri(N["A5"], 0.3, 0.3, 4), tri(N["E5"], 0.3, 0.3, 4)], 0.12))
+snd("poke", woodblock(700, 0.4))
+snd("charge", square(200, 0.5, 0.18, 0.25, 1.5, slide=500))
+snd("slash", mix(noise(0.25, 0.6, 10, 0.1), square(900, 0.2, 0.15, 0.5, 8, slide=-700)))
+snd("fire", mix(noise(0.35, 0.45, 6, 0.85), tri(180, 0.3, 0.3, 6, slide=-80)))
+snd("thunder", mix(noise(0.6, 0.7, 4, 0.92), drum(55, 0.6, 0.8, 0.4)))
+snd("fizzle", tri(300, 0.2, 0.3, 10, slide=-200))
+snd("steal", seq([pluck(N["C6"], 0.08, 0.3), pluck(N["A5"], 0.08, 0.3), pluck(N["F5"], 0.15, 0.3)], 0.05))
+snd("unlock", seq([kalimba(N["G4"]), kalimba(N["D5"]), kalimba(N["G5"], 0.7)], 0.12))
+snd("v_look", seq([marimba(N["E5"], 0.15, 0.3), marimba(N["A5"], 0.2, 0.3)], 0.06))
+snd("v_brace", drum(110, 0.15, 0.5, 0.1))
+snd("v_absorb", mix(tri(400, 0.2, 0.4, 8, slide=-250)))
+snd("v_hide", noise(0.25, 0.25, 10, 0.95))
+snd("v_help", seq([pluck(N["C5"], 0.15), pluck(N["C5"], 0.15)], 0.14))
+snd("v_flee", seq([woodblock(1100, 0.3), woodblock(1300, 0.3), woodblock(1500, 0.3)], 0.06))
+snd("battle_incident", seq([marimba(N["E4"], 0.4), marimba(N["C4"], 0.4), marimba(N["G3"], 0.8)], 0.18))
+snd("battle_fled", seq([pluck(N["C5"], 0.15), pluck(N["E5"], 0.15), pluck(N["G5"], 0.3)], 0.07))
+snd("battle_bored", seq([square(N["G4"], 0.15, 0.15), square(N["E4"], 0.15, 0.15), square(N["C4"], 0.4, 0.15, decay=2)], 0.16))
 
 # icon
 icon = blob(64, 52, MUTED["slime"], eyes=False)

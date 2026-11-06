@@ -99,6 +99,11 @@ func font(id: String) -> Font:
 		var ff := FontFile.new()
 		if ff.load_dynamic_font(e.path) == OK:
 			f = ff
+	if f is FontFile and bool(e.get("pixel", false)):
+		var pf: FontFile = f
+		pf.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+		pf.hinting = TextServer.HINTING_NONE
+		pf.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
 	_cache["font:" + id] = f
 	return f
 

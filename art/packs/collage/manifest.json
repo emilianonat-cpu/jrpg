@@ -106,5 +106,41 @@
 			"file": "bg_title.png",
 			"centered": false
 		}
+	},
+	"ui": {
+		"panel_dialogue": {
+			"file": "panel_dialogue.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_hud": {
+			"file": "panel_hud.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_slime": {
+			"file": "panel_slime.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_hero_menu": {
+			"file": "panel_hero_menu.png",
+			"margin": 3,
+			"padding": 4
+		}
+	},
+	"fonts": {
+		"font_main": {
+			"file": "tiny5.woff",
+			"pixel": true
+		},
+		"font_heroes": {
+			"file": "vt323.woff",
+			"pixel": true
+		},
+		"font_slime": {
+			"file": "pixelify-sans.woff",
+			"pixel": true
+		}
 	}
 }

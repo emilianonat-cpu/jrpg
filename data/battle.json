@@ -26,30 +26,36 @@
 	"verbs": [
 		{
 			"id": "look",
-			"label": "verb.look"
+			"label": "verb.look",
+			"sfx": "v_look"
 		},
 		{
 			"id": "defend",
-			"label": "verb.defend"
+			"label": "verb.defend",
+			"sfx": "v_brace"
 		},
 		{
 			"id": "absorb",
 			"label": "verb.absorb",
-			"needs": "absorbable"
+			"needs": "absorbable",
+			"sfx": "v_absorb"
 		},
 		{
 			"id": "hide",
 			"label": "verb.hide",
-			"needs": "cover"
+			"needs": "cover",
+			"sfx": "v_hide"
 		},
 		{
 			"id": "call_help",
 			"label": "verb.call_help",
-			"needs": "ally_call"
+			"needs": "ally_call",
+			"sfx": "v_help"
 		},
 		{
 			"id": "flee",
-			"label": "verb.flee"
+			"label": "verb.flee",
+			"sfx": "v_flee"
 		}
 	],
 	"boredom_lines": {

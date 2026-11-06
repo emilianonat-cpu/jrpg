@@ -31,6 +31,7 @@ func play(lines: Array) -> int:
 		speaker_label.visible = spk != ""
 		speaker_label.text = Content.name_of(spk) if spk != "" else ""
 		text_label.text = Content.text(str(line.get("text", "")), line.get("args", {}))
+		Art.play_sound("blip_" + spk if Art.sound("blip_" + spk) != null else "ui_blip")
 		var options: Array = line.get("choices", [])
 		if options.is_empty():
 			choices.visible = false

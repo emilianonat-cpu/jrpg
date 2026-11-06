@@ -35,3 +35,7 @@ Same WikiArt subset (`wikiart_256/Ukiyo_e`).
   ("You can use this tileset for whatever you like"). Copied from github.com/series-ai/jam-ready-assets.
   Brand = knight_m, Mira = wizzard_f, Temp = elf_m. The same pack gives the generic pixel junk pasted
   around the Meadow (floor tiles, crates, skulls, flasks, swords, a bomb, a column, a heart).
+
+## Fonts (SIL Open Font License 1.1, licence files in `art/sources/fonts`)
+- Tiny5 (The Tiny5 Project Authors), VT323 (Peter Hull), Pixelify Sans (The Pixelify Sans Project Authors),
+  taken from the @fontsource packages on npm.

@@ -10,14 +10,16 @@
 		"mouse_enabled": true
 	},
 	"ui": {
-		"font_size": 6,
+		"font_size": 8,
 		"text_color": "#f4f0e6",
 		"line_spacing": 0,
 		"battle_log_delay": 1.6,
 		"hero_cursor_step": 0.3,
 		"slime_panel_text_color": "#2a2420",
 		"show_task_list": false,
-		"toast_seconds": 2.5
+		"toast_seconds": 2.5,
+		"font_size_heroes": 10,
+		"font_size_slime": 8
 	},
 	"clock": {
 		"_comment": "6:00-18:00 in about 6-8 real minutes",
@@ -42,6 +44,13 @@
 	"incident": {
 		"clock_penalty_minutes": 60,
 		"reset_task_progress": false
+	},
+	"juice": {
+		"_comment": "Tiny physical feedback in the Meadow: Slayme squashes, sinks pop, pickups fly in.",
+		"squash": [1.35, 0.7],
+		"pop": 1.35,
+		"seconds": 0.25,
+		"slurp_seconds": 0.18
 	},
 	"battle": {
 		"unlock": {

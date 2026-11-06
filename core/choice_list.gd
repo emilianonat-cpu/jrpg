@@ -52,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
 		if bool(items[index].get("enabled", true)):
+			Art.play_sound("ui_confirm")
 			chosen.emit(str(items[index].get("id", str(index))), index)
 		return
 	elif event.is_action_pressed("cancel") and allow_cancel:
@@ -68,6 +69,7 @@ func _move(step: int) -> void:
 	index = (index + step + n) % n
 	_refresh()
 	moved.emit(index)
+	Art.play_sound("ui_move")
 
 
 func _refresh() -> void:
@@ -87,9 +89,11 @@ func _on_label_input(event: InputEvent, i: int) -> void:
 		index = i
 		_refresh()
 		moved.emit(index)
+		Art.play_sound("ui_move")
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		index = i
 		_refresh()
 		accept_event()
 		if bool(items[i].get("enabled", true)):
+			Art.play_sound("ui_confirm")
 			chosen.emit(str(items[i].get("id", str(i))), i)

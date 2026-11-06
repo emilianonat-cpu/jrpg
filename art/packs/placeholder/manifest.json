@@ -376,6 +376,96 @@
 		},
 		"deliver": {
 			"file": "deliver.wav"
+		},
+		"done": {
+			"file": "done.wav"
+		},
+		"nope": {
+			"file": "nope.wav"
+		},
+		"spit": {
+			"file": "spit.wav"
+		},
+		"footsteps": {
+			"file": "footsteps.wav"
+		},
+		"ui_move": {
+			"file": "ui_move.wav"
+		},
+		"ui_confirm": {
+			"file": "ui_confirm.wav"
+		},
+		"ui_blip": {
+			"file": "ui_blip.wav"
+		},
+		"blip_mentor": {
+			"file": "blip_mentor.wav"
+		},
+		"blip_colleague": {
+			"file": "blip_colleague.wav"
+		},
+		"blip_partner": {
+			"file": "blip_partner.wav"
+		},
+		"blip_kid": {
+			"file": "blip_kid.wav"
+		},
+		"pose": {
+			"file": "pose.wav"
+		},
+		"focus": {
+			"file": "focus.wav"
+		},
+		"poke": {
+			"file": "poke.wav"
+		},
+		"charge": {
+			"file": "charge.wav"
+		},
+		"slash": {
+			"file": "slash.wav"
+		},
+		"fire": {
+			"file": "fire.wav"
+		},
+		"thunder": {
+			"file": "thunder.wav"
+		},
+		"fizzle": {
+			"file": "fizzle.wav"
+		},
+		"steal": {
+			"file": "steal.wav"
+		},
+		"unlock": {
+			"file": "unlock.wav"
+		},
+		"v_look": {
+			"file": "v_look.wav"
+		},
+		"v_brace": {
+			"file": "v_brace.wav"
+		},
+		"v_absorb": {
+			"file": "v_absorb.wav"
+		},
+		"v_hide": {
+			"file": "v_hide.wav"
+		},
+		"v_help": {
+			"file": "v_help.wav"
+		},
+		"v_flee": {
+			"file": "v_flee.wav"
+		},
+		"battle_incident": {
+			"file": "battle_incident.wav"
+		},
+		"battle_fled": {
+			"file": "battle_fled.wav"
+		},
+		"battle_bored": {
+			"file": "battle_bored.wav"
 		}
 	}
 }

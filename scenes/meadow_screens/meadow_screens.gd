@@ -315,8 +315,44 @@ func _spit() -> void:
 	if day.carried == "":
 		return
 	day.put_back()
+	Art.play_sound("spit")
 	hud.toast(Content.text("msg.put_back"))
 	_rebuild()
+
+
+# ---- feel: tiny physical feedback (numbers in rules.json "juice") ------------------------
+
+## Slayme wobbles: squashed, then back.
+func _squash(node: Node2D) -> void:
+	if node == null:
+		return
+	var s: Array = Rules.get_value("juice.squash", [1.3, 0.7])
+	var t := create_tween()
+	node.scale = Vector2(float(s[0]), float(s[1]))
+	t.tween_property(node, "scale", Vector2.ONE, Rules.num("juice.seconds", 0.22)).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+
+## Something just got a piece back: it jumps a little.
+func _pop(o: Node2D) -> void:
+	var k := Rules.num("juice.pop", 1.35)
+	var t := create_tween()
+	o.scale = Vector2(k, k)
+	t.tween_property(o, "scale", Vector2.ONE, Rules.num("juice.seconds", 0.22)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## A picked-up thing flies into Slayme and shrinks (a copy: the real one is gone).
+func _slurp(o: WorldObject) -> void:
+	if player == null:
+		return
+	var ghost := ArtSprite.new()
+	ghost.set_art(str(o.data.get("art", "")))
+	ghost.position = o.position
+	objects.add_child(ghost)
+	var t := create_tween().set_parallel(true)
+	var d := Rules.num("juice.slurp_seconds", 0.18)
+	t.tween_property(ghost, "position", player.position, d).set_ease(Tween.EASE_IN)
+	t.tween_property(ghost, "scale", Vector2(0.2, 0.2), d)
+	t.chain().tween_callback(ghost.queue_free)
 
 
 # ---- acting -------------------------------------------------------------------------
@@ -357,6 +393,8 @@ func _use_pickup(o: WorldObject) -> void:
 	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
 	if r.ok:
 		Art.play_sound("absorb")
+		_slurp(o)
+		_squash(player)
 		o.visible = false
 		o.queue_free()
 		focus = null
@@ -367,6 +405,7 @@ func _use_source(o: WorldObject) -> void:
 	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
 	if r.ok:
 		Art.play_sound("absorb")
+		_squash(player)
 
 
 func _use_sink(o: WorldObject) -> void:
@@ -379,7 +418,11 @@ func _use_sink(o: WorldObject) -> void:
 	var title := Content.text(str(day.task(task_id).get("def", {}).get("title", "")))
 	hud.toast(Content.text(r.msg, {"title": title}))
 	if r.ok:
-		Art.play_sound("deliver")
+		Art.play_sound("done" if r.get("completed", false) else "deliver")
+		_squash(player)
+		_pop(o)
+	else:
+		Art.play_sound("nope")
 	_refresh_object(o)
 	if r.get("completed", false) and bool(day.task(task_id).def.get("leftover", false)):
 		GameState.award("leftover_finished")
@@ -646,6 +689,7 @@ func _update_passes(_prev: float, now: float) -> void:
 			if loc == location_id and not p.warned.has(loc) and t < float(seg.offset) and float(seg.offset) - t <= warn:
 				p.warned[loc] = true
 				hud.toast(Content.text("world.heroes_coming_toast"))
+				Art.play_sound("footsteps")
 			if t >= float(seg.offset) and not p.entered.has(loc):
 				p.entered[loc] = true
 				_heroes_enter(p, seg)
@@ -657,6 +701,7 @@ func _update_passes(_prev: float, now: float) -> void:
 		if str(first.location) == location_id and not day.flags.has(key):
 			day.flags[key] = true
 			hud.toast(Content.text("world.heroes_coming_toast"))
+			Art.play_sound("footsteps")
 	passes = passes.filter(func(p): return now - float(p.start) < _route_length())
 
 
