@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://b04awd7okqm3s"
-path="res://.godot/imported/tiny5.woff-4980d264195ac064075966b70b55b1c5.fontdata"
+uid="uid://bji35g2ok1ru"
+path="res://.godot/imported/atkinson-hyperlegible.woff-8ceb3056605aa3d918adf7c2bfa0ba82.fontdata"
 
 [deps]
 
-source_file="res://art/packs/collage/tiny5.woff"
-dest_files=["res://.godot/imported/tiny5.woff-4980d264195ac064075966b70b55b1c5.fontdata"]
+source_file="res://art/packs/collage/atkinson-hyperlegible.woff"
+dest_files=["res://.godot/imported/atkinson-hyperlegible.woff-8ceb3056605aa3d918adf7c2bfa0ba82.fontdata"]
 
 [params]
 

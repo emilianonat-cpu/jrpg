@@ -30,7 +30,10 @@ func start(party: Array, terrain_ids: Array, carried_item: String) -> void:
 	_battle = Content.dict("battle")
 	model = BattleModel.new()
 	model.setup(party, terrain_ids, carried_item)
-	background.texture = Art.texture(str(_battle.get("background", "bg_battle_meadow")))
+	var bg_id := str(_battle.get("background", "bg_battle_meadow"))
+	background.texture = Art.texture(bg_id)
+	if str(Art.entry(bg_id).get("filter", "")) == "linear":
+		background.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	UiTheme.panel(log_panel, "panel_dialogue")
 	UiTheme.panel(slime_panel, "panel_slime")
 	UiTheme.font(hero_row, "font_heroes", "ui.font_size_heroes")

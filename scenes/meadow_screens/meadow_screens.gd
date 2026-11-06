@@ -29,6 +29,8 @@ var _in_battle_flow := false
 var _mouse_pos := Vector2(-100, -100)
 
 var _clock_session := -1
+var _hint_t := 0.0
+var _focus_label: Label = null          # the prompt, next to the thing it is about
 
 @onready var world: Node2D = $World
 @onready var background: ArtSprite = $World/Background
@@ -57,6 +59,14 @@ func enter(_payload: Dictionary) -> void:
 	_prepare_day()
 	cursor.set_art("cursor_focus")
 	cursor.visible = false
+	_focus_label = Label.new()
+	_focus_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_focus_label.z_index = 50
+	_focus_label.add_theme_constant_override("outline_size", Rules.integer("ui.world_text_outline", 4))
+	_focus_label.add_theme_color_override("font_outline_color", Color(Rules.text("ui.world_text_outline_color", "#1c1814")))
+	UiTheme.font(_focus_label, "font_main", "ui.font_size_world")
+	_focus_label.visible = false
+	world.add_child(_focus_label)
 	hud.setup(day)
 	day.carried_changed.connect(_on_carried_changed)
 	Clock.ticked.connect(_on_tick)
@@ -241,11 +251,27 @@ func _show_focus() -> void:
 	if focus == null or busy:
 		cursor.visible = false
 		hud.set_prompt("")
+		if _focus_label != null:
+			_focus_label.visible = false
 		return
 	cursor.visible = true
 	var h := focus.sprite.size().y
-	cursor.position = focus.position + focus.sprite.offset + Vector2(0, -h / 2.0 - 5)
-	hud.set_prompt(_prompt_for(focus))
+	cursor.position = focus.position + focus.sprite.offset * focus.sprite.scale + Vector2(0, -h / 2.0 - 5)
+	var text := _prompt_for(focus)
+	if Rules.flag("ui.prompt_near_object", true) and _focus_label != null:
+		# Proximity: the words sit by the thing they are about, not at the top of the screen.
+		hud.set_prompt("")
+		_focus_label.text = text
+		_focus_label.visible = true
+		_focus_label.reset_size()
+		var sz := _focus_label.get_minimum_size()
+		var p := cursor.position + Vector2(-sz.x / 2.0, -sz.y - 4)
+		p.x = clampf(p.x, 2, 318 - sz.x)
+		if p.y < 14:  # no room above: put it under the thing
+			p.y = focus.position.y + h / 2.0 + 2
+		_focus_label.position = p
+	else:
+		hud.set_prompt(text)
 
 
 func _prompt_for(o: WorldObject) -> String:
@@ -256,7 +282,81 @@ func _prompt_for(o: WorldObject) -> String:
 		return "%s: %s" % [Content.text("prompt.exit"), Content.name_of(str(to.get("name", "")))]
 	if o.kind == "npc":
 		return "%s: %s" % [Content.text("prompt.npc"), Content.name_of(str(o.data.get("character", "")))]
+	var task_id := str(o.data.get("task", ""))
+	if task_id != "" and day.tasks.has(task_id) and o.kind in ["pickup", "source", "sink"]:
+		var t := day.task(task_id)
+		var args := {"item": _item_name(str(t.def.get("item", ""))), "held": _item_name(day.carried),
+			"p": t.get("progress", 0), "a": t.get("amount", 0),
+			"title": Content.text(str(t.def.get("title", "")))}
+		if o.kind == "sink":
+			if day.is_done(task_id):
+				return Content.text("prompt.sink_done", args)
+			if day.carried == str(t.def.get("item", "")):
+				return Content.text("prompt.sink_ready", args)
+			if day.carried != "":
+				return Content.text("prompt.sink_wrong", args)
+			return Content.text("prompt.sink_needs", args)
+		if day.carried != "":
+			return Content.text("prompt.hands_full", args)
+		return Content.text("prompt.absorb_item", args)
 	return o.prompt()
+
+
+# ---- hints: what can be used right now moves a little (affordance) ----------------------
+
+## "hint": something to pick up (nothing in Slayme), or the place where what he holds goes.
+func _hint_for(o: WorldObject) -> String:
+	var task_id := str(o.data.get("task", ""))
+	if task_id == "" or not day.tasks.has(task_id) or day.is_done(task_id):
+		return ""
+	var item := str(day.task(task_id).def.get("item", ""))
+	if o.kind == "sink" and day.carried == item:
+		return "goal"
+	if o.kind in ["pickup", "source"] and day.carried == "":
+		return "take"
+	return ""
+
+
+func _update_hints(delta: float) -> void:
+	_hint_t += delta
+	var bob := Rules.num("juice.hint_bob_pixels", 1.5)
+	var bob_speed := Rules.num("juice.hint_bob_speed", 3.0)
+	var glow := Rules.num("juice.hint_glow", 0.45)
+	var glow_speed := Rules.num("juice.hint_glow_speed", 5.0)
+	for o in objects.get_children():
+		if not (o is WorldObject) or o.sprite == null:
+			continue
+		match _hint_for(o):
+			"take":
+				o.sprite.position.y = -absf(sin(_hint_t * bob_speed + o.position.x)) * bob
+				o.sprite.modulate = Color.WHITE
+			"goal":
+				o.sprite.position.y = 0.0
+				var k := 1.0 + glow * (0.5 + 0.5 * sin(_hint_t * glow_speed))
+				o.sprite.modulate = Color(k, k, k * 0.85)
+			_:
+				o.sprite.position.y = 0.0
+				o.sprite.modulate = Color.WHITE
+
+
+## A few words float up from a thing and fade: "+1", "2/3"...
+func _float_text(at: Vector2, text: String, color: String = "") -> void:
+	var l := Label.new()
+	l.text = text
+	l.z_index = 60
+	l.add_theme_constant_override("outline_size", Rules.integer("ui.world_text_outline", 4))
+	l.add_theme_color_override("font_outline_color", Color(Rules.text("ui.world_text_outline_color", "#1c1814")))
+	if color != "":
+		l.add_theme_color_override("font_color", Color(color))
+	UiTheme.font(l, "font_main", "ui.font_size_world")
+	objects.add_child(l)
+	var sz := l.get_minimum_size()
+	l.position = at - Vector2(sz.x / 2.0, sz.y + 8)
+	var t := create_tween().set_parallel(true)
+	var d := Rules.num("juice.float_seconds", 0.9)
+	t.tween_property(l, "position:y", l.position.y - Rules.num("juice.float_pixels", 14), d).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	t.tween_property(l, "modulate:a", 0.0, d).set_delay(d * 0.5)
+	t.chain().tween_callback(l.queue_free)
 
 
 func _hotspot_at(p: Vector2) -> WorldObject:
@@ -351,7 +451,7 @@ func _slurp(o: WorldObject) -> void:
 	var t := create_tween().set_parallel(true)
 	var d := Rules.num("juice.slurp_seconds", 0.18)
 	t.tween_property(ghost, "position", player.position, d).set_ease(Tween.EASE_IN)
-	t.tween_property(ghost, "scale", Vector2(0.2, 0.2), d)
+	t.tween_property(ghost, "scale", ghost.scale * 0.2, d)
 	t.chain().tween_callback(ghost.queue_free)
 
 
@@ -375,7 +475,10 @@ func act(o: WorldObject) -> void:
 	var dist := player.position.distance_to(target)
 	if dist > 1.0:
 		var tw := create_tween()
-		tw.tween_property(player, "position", target, dist / Rules.num("screens.slime_speed", 90))
+		var speed := Rules.num("screens.slime_speed", 90)
+		if day.carried != "":
+			speed *= Rules.num("screens.carry_speed_factor", 0.8)  # full of something: slower
+		tw.tween_property(player, "position", target, dist / speed)
 		await tw.finished
 	busy = false
 	if not is_instance_valid(o) or not o.is_inside_tree():
@@ -390,11 +493,13 @@ func act(o: WorldObject) -> void:
 
 func _use_pickup(o: WorldObject) -> void:
 	var r := day.take_pickup(o.object_id(), str(o.data.task))
-	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
-	if r.ok:
+	if not r.ok:
+		hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
+	else:
 		Art.play_sound("absorb")
 		_slurp(o)
 		_squash(player)
+		_float_text(player.position, Content.text("fx.took", {"item": _item_name(day.carried)}))
 		o.visible = false
 		o.queue_free()
 		focus = null
@@ -402,10 +507,12 @@ func _use_pickup(o: WorldObject) -> void:
 
 func _use_source(o: WorldObject) -> void:
 	var r := day.absorb(str(o.data.task))
-	hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
-	if r.ok:
+	if not r.ok:
+		hud.toast(Content.text(r.msg, {"item": _item_name(day.carried)}))
+	else:
 		Art.play_sound("absorb")
 		_squash(player)
+		_float_text(player.position, Content.text("fx.took", {"item": _item_name(day.carried)}))
 
 
 func _use_sink(o: WorldObject) -> void:
@@ -421,6 +528,15 @@ func _use_sink(o: WorldObject) -> void:
 		Art.play_sound("done" if r.get("completed", false) else "deliver")
 		_squash(player)
 		_pop(o)
+		var t := day.task(task_id)
+		_float_text(o.position + o.sprite.offset * o.sprite.scale - Vector2(0, o.sprite.size().y / 2.0),
+			Content.text("fx.progress", {"p": t.get("progress", 0), "a": t.get("amount", 0)}),
+			Rules.text("ui.done_color", "#ffe28a") if r.get("completed", false) else "")
+		var line_key := "task.done_line." + task_id
+		if r.get("completed", false) and Content.has_text(line_key):
+			# The job is done: one dry line about what it was for.
+			hud.toast("%s %s" % [Content.text(r.msg, {"title": title}), Content.text(line_key)],
+				Rules.num("ui.done_line_seconds", 6.0))
 	else:
 		Art.play_sound("nope")
 	_refresh_object(o)
@@ -772,7 +888,8 @@ func _bark() -> void:
 			Rules.num("screens.hero_bark_seconds", 6.0))
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_update_hints(delta)
 	if not busy and day.flags.get("_rebuild", false):
 		day.flags.erase("_rebuild")
 		_rebuild()

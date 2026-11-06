@@ -10,7 +10,7 @@
 		"mouse_enabled": true
 	},
 	"ui": {
-		"font_size": 8,
+		"font_size": 9,
 		"text_color": "#f4f0e6",
 		"line_spacing": 0,
 		"battle_log_delay": 1.6,
@@ -19,7 +19,13 @@
 		"show_task_list": false,
 		"toast_seconds": 2.5,
 		"font_size_heroes": 10,
-		"font_size_slime": 8
+		"font_size_slime": 10,
+		"font_size_world": 8,
+		"prompt_near_object": true,
+		"world_text_outline": 4,
+		"world_text_outline_color": "#1c1814",
+		"done_color": "#ffe28a",
+		"done_line_seconds": 6.0
 	},
 	"clock": {
 		"_comment": "6:00-18:00 in about 6-8 real minutes",
@@ -46,11 +52,20 @@
 		"reset_task_progress": false
 	},
 	"juice": {
-		"_comment": "Tiny physical feedback in the Meadow: Slayme squashes, sinks pop, pickups fly in.",
-		"squash": [1.35, 0.7],
+		"_comment": "Tiny physical feedback in the Meadow: Slayme squashes, sinks pop, pickups fly in. hint_*: what you can take bobs, where what you hold goes glows. float_*: '+ shard', '2/3' rising from things.",
+		"squash": [
+			1.35,
+			0.7
+		],
 		"pop": 1.35,
 		"seconds": 0.25,
-		"slurp_seconds": 0.18
+		"slurp_seconds": 0.18,
+		"hint_bob_pixels": 1.5,
+		"hint_bob_speed": 3.0,
+		"hint_glow": 0.45,
+		"hint_glow_speed": 5.0,
+		"float_seconds": 0.9,
+		"float_pixels": 14
 	},
 	"battle": {
 		"unlock": {
@@ -159,6 +174,7 @@
 		"hero_warning_minutes": 20,
 		"focus_padding": 4,
 		"hero_cross_seconds_min": 16,
-		"hero_bark_seconds": 6
+		"hero_bark_seconds": 6,
+		"carry_speed_factor": 0.8
 	}
 }

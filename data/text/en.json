@@ -28,7 +28,7 @@
 	"msg.nothing_to_release": "Nothing inside to put here.",
 	"msg.wrong_item": "That does not go here.",
 	"msg.absorbed": "Absorbed {item}.",
-	"msg.released": "Put it back.",
+	"msg.released": "One more piece in place.",
 	"msg.task_completed": "Done: {title}.",
 	"board.notice.default": "Lovely day on {name:place_world}! {n} adventurers expected. Smile!",
 	"board.notice.sunny": "Sunny with a chance of adventurers ({n})! Hydrate and smile!",
@@ -180,5 +180,18 @@
 	"bark.mage.3": "Do they ever... do anything? The slimes?",
 	"bark.thief.1": "If it's shiny, it's probably worth something.",
 	"bark.thief.2": "Pot! Pots always have something.",
-	"bark.thief.3": "Rent's due. Sorry, little guys."
+	"bark.thief.3": "Rent's due. Sorry, little guys.",
+	"prompt.sink_ready": "Put {item} here ({p}/{a})",
+	"prompt.sink_needs": "Needs {item} ({p}/{a})",
+	"prompt.sink_wrong": "Needs {item}, not {held}",
+	"prompt.sink_done": "{title}: done",
+	"prompt.absorb_item": "Absorb {item}",
+	"prompt.hands_full": "Already holding {held}",
+	"fx.took": "+ {item}",
+	"fx.progress": "{p}/{a}",
+	"task.done_line.pot": "It will be broken again by Thursday. That is the job.",
+	"task.done_line.chest": "Next week a Hero will open it and call it loot.",
+	"task.done_line.grass": "Nobody will notice the grass grew back. That means it went well.",
+	"task.done_line.leftover_pot": "Your colleague's pot. They will say thanks. Probably.",
+	"task.done_line.leftover_chest": "The chest is whole. The paperwork is still half."
 }

@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dygrm5wxxw6pq"
-path="res://.godot/imported/pixelify-sans.woff-a8cae15a85296328d17e10f66f56eb4c.fontdata"
+uid="uid://dobg6fbm36ipo"
+path="res://.godot/imported/patrick-hand.woff-e265374e4c02a72fc601425c3f25d808.fontdata"
 
 [deps]
 
-source_file="res://art/packs/collage/pixelify-sans.woff"
-dest_files=["res://.godot/imported/pixelify-sans.woff-a8cae15a85296328d17e10f66f56eb4c.fontdata"]
+source_file="res://art/packs/collage/patrick-hand.woff"
+dest_files=["res://.godot/imported/patrick-hand.woff-e265374e4c02a72fc601425c3f25d808.fontdata"]
 
 [params]
 
