@@ -24,6 +24,10 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="Place" type="Label" parent="Top/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Carry" type="Label" parent="Top/Row"]
 unique_name_in_owner = true
 layout_mode = 2

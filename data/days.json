@@ -1,5 +1,5 @@
 {
-	"_comment": "Daily variations, cycling. Every day is the same day, slightly different. defaults apply to all days. thief_stops = the thief stops at each pot he breaks (the party waits).",
+	"_comment": "Daily variations, cycling. Every day is the same day, slightly different. incidents = the day's planned incidents (screens mode): the board's number is their count. who=colleague means Gig, unless he was warned. defaults apply to all days.",
 	"defaults": {
 		"party": [
 			"hero_sword",
@@ -10,32 +10,104 @@
 		"board_notice": "board.notice.default",
 		"adventurers": 6,
 		"leftover": {},
-		"thief_stops": false
+		"thief_stops": false,
+		"incidents": [],
+		"bit_line": "dlg.kid.play_1",
+		"board_title": "board.title.1"
 	},
 	"variations": [
 		{
 			"leftover": {
 				"task": "leftover_pot",
 				"progress": 3
-			}
+			},
+			"board_notice": "board.notice.day1",
+			"board_title": "board.title.1",
+			"incidents": [
+				{
+					"time": "09:12",
+					"who": "colleague"
+				},
+				{
+					"time": "09:30"
+				},
+				{
+					"time": "11:40"
+				},
+				{
+					"time": "14:08"
+				},
+				{
+					"time": "14:26"
+				},
+				{
+					"time": "16:10"
+				}
+			],
+			"bit_line": "dlg.kid.play_1"
 		},
 		{
 			"hero_delay": 10,
-			"adventurers": 7,
 			"leftover": {
 				"task": "leftover_chest",
-				"progress": 2
-			}
+				"progress": 1
+			},
+			"board_notice": "board.notice.day2",
+			"board_title": "board.title.2",
+			"incidents": [
+				{
+					"time": "09:20",
+					"who": "colleague"
+				},
+				{
+					"time": "09:41"
+				},
+				{
+					"time": "10:55"
+				},
+				{
+					"time": "14:15"
+				},
+				{
+					"time": "14:30"
+				},
+				{
+					"time": "15:05"
+				},
+				{
+					"time": "16:40"
+				}
+			],
+			"bit_line": "dlg.kid.play_2"
 		},
 		{
 			"hero_delay": -10,
-			"board_notice": "board.notice.sunny",
-			"adventurers": 5,
+			"thief_stops": true,
 			"leftover": {
 				"task": "leftover_pot",
 				"progress": 2
 			},
-			"thief_stops": true
+			"board_notice": "board.notice.day3",
+			"board_title": "board.title.3",
+			"incidents": [
+				{
+					"time": "09:00",
+					"who": "colleague"
+				},
+				{
+					"time": "09:22"
+				},
+				{
+					"time": "13:58"
+				},
+				{
+					"time": "14:12"
+				},
+				{
+					"time": "16:30"
+				}
+			],
+			"bit_line": "dlg.kid.play_3"
 		}
 	]
 }

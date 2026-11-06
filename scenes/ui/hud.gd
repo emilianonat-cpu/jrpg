@@ -9,6 +9,7 @@ var _day: DayState = null
 @onready var day_label: Label = %Day
 @onready var time_label: Label = %Time
 @onready var carry_label: Label = %Carry
+@onready var place_label: Label = %Place
 @onready var task_list: VBoxContainer = %List
 @onready var prompt_label: Label = %Prompt
 @onready var toast_label: Label = %Toast
@@ -19,6 +20,12 @@ func _ready() -> void:
 	UiTheme.panel(tasks_panel, "panel_hud")
 	prompt_label.text = ""
 	toast_label.text = ""
+	place_label.text = ""
+	tasks_panel.visible = Rules.flag("ui.show_task_list", true)
+
+
+func set_place(text: String) -> void:
+	place_label.text = text
 
 
 func setup(day: DayState) -> void:

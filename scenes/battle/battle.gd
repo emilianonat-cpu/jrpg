@@ -80,6 +80,9 @@ func _build_heroes() -> void:
 
 func _run() -> void:
 	await _say(Content.text("battle.log.intro"))
+	var bark := _battle_bark()
+	if bark != "":
+		await _say(bark)
 	while model.outcome == "":
 		model.plan_round()
 		await _show_hero_menus()
@@ -88,6 +91,20 @@ func _run() -> void:
 		await _play(events)
 	await _wait(Rules.num("ui.battle_log_delay", 0.9))
 	battle_finished.emit(model.result())
+
+
+## One hero says something as the fight starts (heroes.json barks).
+func _battle_bark() -> String:
+	var defs: Dictionary = Content.dict("heroes").get("heroes", {})
+	var ids := model.hero_ids()
+	if ids.is_empty():
+		return ""
+	var n := int(GameState.stats.get("battles", 0))
+	var id: String = ids[n % ids.size()]
+	var barks: Array = defs.get(id, {}).get("barks", [])
+	if barks.is_empty():
+		return ""
+	return "%s: %s" % [Content.name_of(id), Content.text(str(barks[(n + 1) % barks.size()]))]
 
 
 ## The Heroes' cursors move on their menu: the player sees what is coming.
@@ -215,5 +232,11 @@ func _wait(seconds: float, skippable: bool = true) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _choosing and event.is_action_pressed("interact"):
+		_skip = true
+		get_viewport().set_input_as_handled()
+
+
+func _input(event: InputEvent) -> void:
+	if not _choosing and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_skip = true
 		get_viewport().set_input_as_handled()

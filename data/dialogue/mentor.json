@@ -1,23 +1,132 @@
 {
-	"_comment": "Mentor dialogue by trust step. Line: speaker (id in names.json, empty = narration), text (key in text/en.json), optional choices (list of text keys). greeting_step_N = first talk of the day; idle_step_N = later talks; question = final step.",
+	"_comment": "Mentor. greeting_step_S_day_D falls back to greeting_step_S. idle_step_S is a list of sequences used in turn. question = the last step: end of the prototype.",
+	"greeting_step_1_day_1": [
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.greet_1"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.tasks"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.leftover"
+		}
+	],
 	"greeting_step_1": [
-		{ "speaker": "mentor", "text": "dlg.mentor.greet_1" },
-		{ "speaker": "mentor", "text": "dlg.mentor.tasks" },
-		{ "speaker": "mentor", "text": "dlg.mentor.tip_1" }
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.greet_1b"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.tasks"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.pot_yesterday"
+		}
 	],
 	"greeting_step_2": [
-		{ "speaker": "mentor", "text": "dlg.mentor.greet_2" },
-		{ "speaker": "mentor", "text": "dlg.mentor.tasks" },
-		{ "speaker": "mentor", "text": "dlg.mentor.colleagues" }
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.greet_2"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.tasks_short"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.pot_yesterday"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.colleagues"
+		}
 	],
 	"greeting_step_3": [
-		{ "speaker": "mentor", "text": "dlg.mentor.greet_2" }
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.greet_2"
+		}
 	],
-	"idle_step_1": [ { "speaker": "mentor", "text": "dlg.mentor.idle_1" } ],
-	"idle_step_2": [ { "speaker": "mentor", "text": "dlg.mentor.idle_2" } ],
-	"idle_step_3": [ { "speaker": "mentor", "text": "dlg.mentor.idle_2" } ],
+	"idle_step_1": [
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_1a"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_1b"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_1c"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_1d"
+			}
+		]
+	],
+	"idle_step_2": [
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_2a"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.question_a"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_2b"
+			}
+		],
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.question_b"
+			}
+		]
+	],
+	"idle_step_3": [
+		[
+			{
+				"speaker": "mentor",
+				"text": "dlg.mentor.idle_2a"
+			}
+		]
+	],
 	"question": [
-		{ "speaker": "mentor", "text": "dlg.mentor.question_1" },
-		{ "speaker": "mentor", "text": "dlg.mentor.question_2", "choices": ["dlg.protagonist.silence"] }
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.question_1"
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.question_2",
+			"choices": [
+				"dlg.protagonist.silence"
+			]
+		},
+		{
+			"speaker": "mentor",
+			"text": "dlg.mentor.question_3"
+		}
 	]
 }

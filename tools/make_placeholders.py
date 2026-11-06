@@ -88,7 +88,7 @@ def sprite(id, img, frames=1, fps=0, **extra):
 os.makedirs(OUT, exist_ok=True)
 
 # --- mobs: tiny, few frames, choppy (low fps) ---
-sprite("slime", blob(12, 10, MUTED["slime"], 2, eyes=True), 2, 3)
+sprite("slime", blob(12, 10, MUTED["slime"] + (190,), 2, eyes=True), 2, 3)
 sprite("slime_pool_mate", blob(12, 10, MUTED["slime"], 2, eyes=True), 2, 2)
 sprite("colleague", blob(12, 10, (110, 150, 200), 2, eyes=True), 2, 4)
 sprite("slime_battle", blob(12, 10, MUTED["slime"], 2, eyes=True), 2, 3)
@@ -99,9 +99,9 @@ sprite("partner", person(12, 16, (120, 130, 170), MUTED["slime"]), 2, 1)
 sprite("kid", blob(8, 7, MUTED["slime"], 2, eyes=True), 2, 4)
 
 # --- heroes: bigger, saturated, smoother (more fps) ---
-sprite("hero_sword", person(12, 20, SATURATED["sword"], (240, 200, 170), 2, SATURATED["gold"]), 2, 6)
-sprite("hero_mage", person(12, 20, SATURATED["mage"], (240, 200, 170), 2, SATURATED["gold"]), 2, 6)
-sprite("hero_thief", person(12, 20, SATURATED["thief"], (240, 200, 170), 2, SATURATED["gold"]), 2, 6)
+sprite("hero_sword", person(18, 30, SATURATED["sword"], (240, 200, 170), 4, SATURATED["gold"]), 4, 8, offset=[0, -12])
+sprite("hero_mage", person(18, 30, SATURATED["mage"], (240, 200, 170), 4, SATURATED["gold"]), 4, 8, offset=[0, -12])
+sprite("hero_thief", person(18, 30, SATURATED["thief"], (240, 200, 170), 4, SATURATED["gold"]), 4, 8, offset=[0, -12])
 sprite("hero_sword_battle", person(40, 60, SATURATED["sword"], (250, 210, 180), 4, SATURATED["gold"]), 4, 8)
 sprite("hero_mage_battle", person(40, 60, SATURATED["mage"], (250, 210, 180), 4, SATURATED["gold"]), 4, 8)
 sprite("hero_thief_battle", person(40, 60, SATURATED["thief"], (250, 210, 180), 4, SATURATED["gold"]), 4, 8)
@@ -176,6 +176,116 @@ frame("panel_dialogue", (24, 24, 40, 235), (230, 230, 230))
 frame("panel_hero_menu", (20, 40, 150, 235), (255, 255, 255))   # the classic blue menu: the Heroes'
 frame("panel_slime", (226, 218, 196, 240), (90, 80, 70))          # paper: Slayme's handwritten verbs
 frame("panel_hud", (0, 0, 0, 140), (0, 0, 0, 0))
+
+
+
+
+# Fixed-screen prototype (world.mode = screens)
+# ---------------------------------------------------------------------------
+def meadow_bg(name, path_y=None, tree=False, field=False, pool=False):
+    img = Image.new("RGBA", (320, 180), (150, 190, 210))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 319, 70], fill=(170, 200, 214))           # sky, muted
+    d.ellipse([-40, 50, 140, 110], fill=(104, 138, 88))           # far hills
+    d.ellipse([120, 46, 380, 112], fill=(98, 132, 84))
+    d.rectangle([0, 80, 319, 179], fill=MUTED["grass"])
+    rnd = random.Random(name)
+    for _ in range(420):
+        x, y = rnd.randrange(320), rnd.randrange(82, 180)
+        d.point((x, y), fill=MUTED["grass_dark"])
+    for _ in range(26):  # little flowers: the Meadow is poor, not ugly
+        x, y = rnd.randrange(320), rnd.randrange(90, 178)
+        d.point((x, y), fill=rnd.choice([(230, 220, 160), (220, 170, 170), (240, 240, 230)]))
+    if path_y is not None:
+        pts = [(-10, path_y + 4), (80, path_y - 2), (170, path_y + 3), (250, path_y - 3), (330, path_y + 2)]
+        d.line(pts, fill=MUTED["path"], width=22, joint="curve")
+        for _ in range(60):
+            x = rnd.randrange(320); y = path_y + rnd.randrange(-9, 9)
+            d.point((x, y), fill=(160, 142, 104))
+    if tree:
+        d.rectangle([222, 30, 240, 100], fill=(110, 84, 60))
+        d.ellipse([180, -10, 290, 70], fill=(76, 104, 70))
+        d.ellipse([196, 4, 250, 44], fill=(88, 118, 78))
+    if field:
+        for row in range(4):
+            d.line([(0, 112 + row * 18), (319, 108 + row * 18)], fill=(126, 146, 92), width=1)
+    if pool:
+        d.rectangle([0, 160, 40, 179], fill=(110, 96, 86))  # the way home
+    manifest["backgrounds"][name] = {"file": save(img, name + ".png"), "centered": False}
+
+
+meadow_bg("bg_loc_pool", pool=True)
+meadow_bg("bg_loc_path", path_y=108)
+meadow_bg("bg_loc_tree", path_y=104, tree=True)
+meadow_bg("bg_loc_field", field=True)
+
+pool_img = Image.new("RGBA", (84, 26), (0, 0, 0, 0))
+d = ImageDraw.Draw(pool_img)
+d.ellipse([0, 0, 83, 25], fill=(70, 100, 140), outline=(50, 76, 110))
+d.ellipse([10, 5, 60, 14], fill=(96, 130, 170))
+sprite("pool_big", pool_img)
+
+
+def shard():
+    img = Image.new("RGBA", (7, 5), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.polygon([(0, 4), (3, 0), (6, 3), (4, 4)], fill=MUTED["pot"], outline=(120, 70, 50))
+    return img
+
+
+sprite("shard_ground", shard())
+coin = Image.new("RGBA", (5, 5), (0, 0, 0, 0)); d = ImageDraw.Draw(coin)
+d.ellipse([0, 0, 4, 4], fill=MUTED["coin"], outline=(160, 140, 60))
+sprite("coin_ground", coin)
+sprite("seed_sack", blob(14, 14, (170, 150, 110), squash=False))
+
+
+def pot_stage(n, total, color=MUTED["pot"], glue=False):
+    img = Image.new("RGBA", (14, 22), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.rectangle([2, 14, 11, 21], fill=MUTED["stone"], outline=(110, 110, 100))   # pedestal
+    h = int(13 * n / total)
+    if h > 0:
+        d.rectangle([3, 14 - h, 10, 13], fill=color, outline=(120, 70, 50))
+        if glue:
+            d.line([(3, 14 - h // 2), (10, 13 - h // 2)], fill=(240, 230, 200))
+    return img
+
+
+for i in range(4):
+    sprite("pot_stage_%d" % i, pot_stage(i, 3), offset=[0, -8])
+for i in range(5):
+    sprite("glued_stage_%d" % i, pot_stage(i, 4, (165, 120, 95), glue=True), offset=[0, -8])
+for i in range(4):
+    img = Image.new("RGBA", (18, 13), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.rectangle([0, 2, 17, 12], fill=MUTED["wood"], outline=(90, 66, 44))
+    d.rectangle([0, 0, 17, 3], fill=(150, 112, 74), outline=(90, 66, 44))
+    for c in range(i):
+        d.ellipse([3 + c * 4, 5, 6 + c * 4, 8], fill=MUTED["coin"])
+    sprite("chest_stage_%d" % i, img, offset=[0, -4])
+patch = Image.new("RGBA", (20, 10), (0, 0, 0, 0)); d = ImageDraw.Draw(patch)
+d.ellipse([0, 0, 19, 9], fill=(150, 140, 96))
+d.line([(3, 5), (16, 4)], fill=(120, 110, 80))
+sprite("patch_trampled", patch)
+sprout = Image.new("RGBA", (20, 10), (0, 0, 0, 0)); d = ImageDraw.Draw(sprout)
+d.ellipse([0, 2, 19, 9], fill=(120, 120, 84))
+for x in (4, 9, 14):
+    d.line([(x, 7), (x, 2)], fill=(110, 170, 90)); d.point((x - 1, 3), fill=(130, 190, 100))
+sprite("patch_sprout", sprout)
+
+
+def arrow(direction):
+    img = Image.new("RGBA", (9, 9), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    pts = {"right": [(1, 0), (8, 4), (1, 8)], "left": [(7, 0), (0, 4), (7, 8)],
+           "up": [(0, 7), (4, 0), (8, 7)], "down": [(0, 1), (4, 8), (8, 1)]}[direction]
+    d.polygon(pts, fill=(240, 236, 220), outline=(80, 70, 60))
+    return img
+
+
+for dname in ("left", "right", "up", "down"):
+    sprite("exit_" + dname, arrow(dname))
+cur = Image.new("RGBA", (7, 5), (0, 0, 0, 0)); d = ImageDraw.Draw(cur)
+d.polygon([(0, 0), (6, 0), (3, 4)], fill=(255, 250, 200), outline=(60, 50, 40))
+sprite("cursor_focus", cur)
+frame("panel_board", (250, 244, 230, 245), (240, 140, 160))   # the Board: cheerful, clean
 
 
 # --- sounds ---

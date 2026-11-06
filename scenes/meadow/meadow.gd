@@ -21,6 +21,8 @@ var _pending_events: Array = []
 var _spawn := Vector2.ZERO
 var _in_battle_flow := false
 
+var _clock_session := -1
+
 @onready var world: Node2D = $World
 @onready var background: ArtSprite = $World/Background
 @onready var objects: Node2D = $World/Objects
@@ -55,12 +57,13 @@ func enter(_payload: Dictionary) -> void:
 	Clock.ticked.connect(_on_tick)
 	Hooks.emit("meadow.ready", {"screen": self})
 	Clock.start_day()
+	_clock_session = Clock.session
 
 
 func _exit_tree() -> void:
 	if Clock.ticked.is_connected(_on_tick):
 		Clock.ticked.disconnect(_on_tick)
-	Clock.stop()
+	Clock.stop(_clock_session)
 
 
 # ---- building the map from data -------------------------------------------

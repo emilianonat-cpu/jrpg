@@ -1,0 +1,493 @@
+{
+	"_comment": "Fixed-screen Meadow (world.mode = screens). Each location is one 320x180 screen. kind: pickup (absorb it from the ground, task), source (endless, task), sink (release here, task; stages = art per progress; or slot = takes one item, done_art), cover (hide), board, npc, exit (to), exit_home, decor. hero_route in heroes.json says when the party crosses which screen.",
+	"start": "pool",
+	"locations": {
+		"pool": {
+			"name": "place_pool",
+			"background": "bg_loc_pool",
+			"slime_start": [
+				150,
+				140
+			],
+			"pool_mates": {
+				"count": 10,
+				"art": "slime_pool_mate",
+				"center": [
+					86,
+					124
+				],
+				"radius": [
+					40,
+					12
+				]
+			},
+			"terrain": [],
+			"objects": [
+				{
+					"id": "pool",
+					"kind": "decor",
+					"art": "pool_big",
+					"pos": [
+						86,
+						124
+					]
+				},
+				{
+					"id": "board",
+					"kind": "board",
+					"art": "board",
+					"pos": [
+						196,
+						100
+					]
+				},
+				{
+					"id": "mentor",
+					"kind": "npc",
+					"character": "mentor",
+					"art": "mentor",
+					"pos": [
+						226,
+						118
+					],
+					"talk": {
+						"mode": "trust_owner",
+						"file": "mentor"
+					}
+				},
+				{
+					"id": "home_sign",
+					"kind": "exit_home",
+					"art": "home_sign",
+					"pos": [
+						18,
+						152
+					]
+				},
+				{
+					"id": "to_path",
+					"kind": "exit",
+					"to": "path",
+					"art": "exit_right",
+					"pos": [
+						308,
+						132
+					]
+				}
+			]
+		},
+		"path": {
+			"name": "place_path",
+			"background": "bg_loc_path",
+			"slime_start": [
+				160,
+				150
+			],
+			"hero_lane_y": 108,
+			"terrain": [
+				"bush"
+			],
+			"objects": [
+				{
+					"id": "pot_pedestal",
+					"kind": "sink",
+					"task": "pot",
+					"art": "pot_stage_0",
+					"stages": [
+						"pot_stage_0",
+						"pot_stage_1",
+						"pot_stage_2",
+						"pot_stage_3"
+					],
+					"pos": [
+						150,
+						142
+					],
+					"heroes_break_when_done": true
+				},
+				{
+					"id": "shard_1",
+					"kind": "pickup",
+					"task": "pot",
+					"art": "shard_ground",
+					"pos": [
+						58,
+						110
+					]
+				},
+				{
+					"id": "shard_2",
+					"kind": "pickup",
+					"task": "pot",
+					"art": "shard_ground",
+					"pos": [
+						124,
+						104
+					]
+				},
+				{
+					"id": "shard_3",
+					"kind": "pickup",
+					"task": "pot",
+					"art": "shard_ground",
+					"pos": [
+						246,
+						114
+					]
+				},
+				{
+					"id": "path_pot_1",
+					"kind": "decor",
+					"art": "path_pot",
+					"pos": [
+						36,
+						92
+					]
+				},
+				{
+					"id": "path_pot_2",
+					"kind": "decor",
+					"art": "path_pot",
+					"pos": [
+						282,
+						92
+					]
+				},
+				{
+					"id": "bush_path",
+					"kind": "cover",
+					"art": "bush",
+					"pos": [
+						96,
+						152
+					]
+				},
+				{
+					"id": "colleague",
+					"kind": "npc",
+					"character": "colleague",
+					"art": "colleague",
+					"pos": [
+						214,
+						150
+					],
+					"talk": {
+						"mode": "warn",
+						"file": "colleague"
+					}
+				},
+				{
+					"id": "to_pool",
+					"kind": "exit",
+					"to": "pool",
+					"art": "exit_left",
+					"pos": [
+						12,
+						132
+					]
+				},
+				{
+					"id": "to_tree",
+					"kind": "exit",
+					"to": "old_tree",
+					"art": "exit_right",
+					"pos": [
+						308,
+						132
+					]
+				},
+				{
+					"id": "to_field",
+					"kind": "exit",
+					"to": "field",
+					"art": "exit_down",
+					"pos": [
+						300,
+						164
+					]
+				}
+			]
+		},
+		"old_tree": {
+			"name": "place_old_tree",
+			"background": "bg_loc_tree",
+			"slime_start": [
+				160,
+				150
+			],
+			"hero_lane_y": 104,
+			"terrain": [
+				"big_mushroom",
+				"blue_mushroom"
+			],
+			"objects": [
+				{
+					"id": "old_chest",
+					"kind": "sink",
+					"task": "chest",
+					"art": "chest_stage_0",
+					"stages": [
+						"chest_stage_0",
+						"chest_stage_1",
+						"chest_stage_2",
+						"chest_stage_3"
+					],
+					"pos": [
+						238,
+						122
+					]
+				},
+				{
+					"id": "coin_1",
+					"kind": "pickup",
+					"task": "chest",
+					"art": "coin_ground",
+					"pos": [
+						92,
+						142
+					]
+				},
+				{
+					"id": "coin_2",
+					"kind": "pickup",
+					"task": "chest",
+					"art": "coin_ground",
+					"pos": [
+						140,
+						162
+					]
+				},
+				{
+					"id": "coin_3",
+					"kind": "pickup",
+					"task": "chest",
+					"art": "coin_ground",
+					"pos": [
+						186,
+						130
+					]
+				},
+				{
+					"id": "glued_pot",
+					"kind": "sink",
+					"task": "leftover_pot",
+					"art": "glued_stage_0",
+					"stages": [
+						"glued_stage_0",
+						"glued_stage_1",
+						"glued_stage_2",
+						"glued_stage_3",
+						"glued_stage_4"
+					],
+					"pos": [
+						120,
+						96
+					]
+				},
+				{
+					"id": "glued_shard_1",
+					"kind": "pickup",
+					"task": "leftover_pot",
+					"art": "shard_ground",
+					"pos": [
+						40,
+						162
+					]
+				},
+				{
+					"id": "glued_shard_2",
+					"kind": "pickup",
+					"task": "leftover_pot",
+					"art": "shard_ground",
+					"pos": [
+						292,
+						166
+					]
+				},
+				{
+					"id": "glued_shard_3",
+					"kind": "pickup",
+					"task": "leftover_pot",
+					"art": "shard_ground",
+					"pos": [
+						206,
+						166
+					]
+				},
+				{
+					"id": "glued_shard_4",
+					"kind": "pickup",
+					"task": "leftover_pot",
+					"art": "shard_ground",
+					"pos": [
+						70,
+						120
+					]
+				},
+				{
+					"id": "mushroom_big",
+					"kind": "cover",
+					"art": "mushroom_big",
+					"pos": [
+						56,
+						140
+					]
+				},
+				{
+					"id": "mushroom_blue",
+					"kind": "decor",
+					"art": "mushroom_blue",
+					"pos": [
+						274,
+						150
+					]
+				},
+				{
+					"id": "to_path_2",
+					"kind": "exit",
+					"to": "path",
+					"art": "exit_left",
+					"pos": [
+						12,
+						132
+					]
+				}
+			]
+		},
+		"field": {
+			"name": "place_field",
+			"background": "bg_loc_field",
+			"slime_start": [
+				160,
+				140
+			],
+			"terrain": [
+				"mud"
+			],
+			"objects": [
+				{
+					"id": "seed_sack",
+					"kind": "source",
+					"task": "grass",
+					"art": "seed_sack",
+					"pos": [
+						52,
+						124
+					]
+				},
+				{
+					"id": "patch_1",
+					"kind": "sink",
+					"slot": true,
+					"task": "grass",
+					"art": "patch_trampled",
+					"done_art": "patch_sprout",
+					"pos": [
+						130,
+						136
+					]
+				},
+				{
+					"id": "patch_2",
+					"kind": "sink",
+					"slot": true,
+					"task": "grass",
+					"art": "patch_trampled",
+					"done_art": "patch_sprout",
+					"pos": [
+						184,
+						156
+					]
+				},
+				{
+					"id": "patch_3",
+					"kind": "sink",
+					"slot": true,
+					"task": "grass",
+					"art": "patch_trampled",
+					"done_art": "patch_sprout",
+					"pos": [
+						232,
+						128
+					]
+				},
+				{
+					"id": "half_chest",
+					"kind": "sink",
+					"task": "leftover_chest",
+					"art": "chest_stage_0",
+					"stages": [
+						"chest_stage_0",
+						"chest_stage_1",
+						"chest_stage_2",
+						"chest_stage_3",
+						"chest_stage_3"
+					],
+					"pos": [
+						276,
+						98
+					]
+				},
+				{
+					"id": "lost_coin_1",
+					"kind": "pickup",
+					"task": "leftover_chest",
+					"art": "coin_ground",
+					"pos": [
+						96,
+						166
+					]
+				},
+				{
+					"id": "lost_coin_2",
+					"kind": "pickup",
+					"task": "leftover_chest",
+					"art": "coin_ground",
+					"pos": [
+						300,
+						150
+					]
+				},
+				{
+					"id": "lost_coin_3",
+					"kind": "pickup",
+					"task": "leftover_chest",
+					"art": "coin_ground",
+					"pos": [
+						220,
+						104
+					]
+				},
+				{
+					"id": "lost_coin_4",
+					"kind": "pickup",
+					"task": "leftover_chest",
+					"art": "coin_ground",
+					"pos": [
+						36,
+						160
+					]
+				},
+				{
+					"id": "mud",
+					"kind": "decor",
+					"art": "mud",
+					"pos": [
+						104,
+						104
+					]
+				},
+				{
+					"id": "to_path_3",
+					"kind": "exit",
+					"to": "path",
+					"art": "exit_up",
+					"pos": [
+						160,
+						86
+					]
+				}
+			]
+		}
+	}
+}

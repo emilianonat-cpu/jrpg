@@ -11,6 +11,8 @@ var ignore_player := false
 var _curve := Curve2D.new()
 var _dist := 0.0
 var _hold := 0.0
+## Walking speed in px/s; 0 = rule world.hero_walk_speed.
+var speed_override := 0.0
 
 
 func setup(path_points: Array, party: Array) -> void:
@@ -47,7 +49,7 @@ func _process(delta: float) -> void:
 	if _hold > 0.0:
 		_hold -= delta
 		return
-	_dist += Rules.num("world.hero_walk_speed", 16) * delta
+	_dist += (speed_override if speed_override > 0.0 else Rules.num("world.hero_walk_speed", 16)) * delta
 	_place()
 	if _dist - Rules.num("world.hero_spacing", 14) * sprites.size() > _curve.get_baked_length():
 		left_meadow.emit()

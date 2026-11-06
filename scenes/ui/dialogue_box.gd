@@ -66,3 +66,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _waiting and event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
 		advance()
+
+
+func _input(event: InputEvent) -> void:
+	if _waiting and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		get_viewport().set_input_as_handled()
+		advance()

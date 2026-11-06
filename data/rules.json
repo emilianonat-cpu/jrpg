@@ -7,7 +7,7 @@
 		"pack": "placeholder"
 	},
 	"input": {
-		"mouse_enabled": false
+		"mouse_enabled": true
 	},
 	"ui": {
 		"font_size": 6,
@@ -15,12 +15,13 @@
 		"line_spacing": 0,
 		"battle_log_delay": 0.9,
 		"hero_cursor_step": 0.12,
-		"slime_panel_text_color": "#2a2420"
+		"slime_panel_text_color": "#2a2420",
+		"show_task_list": false
 	},
 	"clock": {
 		"_comment": "6:00-18:00 in about 6-8 real minutes",
 		"day_start": "06:00",
-		"minutes_per_second": 1.8,
+		"minutes_per_second": 2.5,
 		"pause_in_dialogue": true
 	},
 	"world": {
@@ -33,11 +34,13 @@
 		"hero_spacing": 14,
 		"break_radius": 14,
 		"thief_stop_seconds": 3.0,
-		"respawn_hidden_seconds": 2.0
+		"respawn_hidden_seconds": 2.0,
+		"mode": "screens",
+		"_comment": "mode: screens (fixed screens, the prototype) or free (top-down meadow from maps/meadow.json)"
 	},
 	"incident": {
 		"clock_penalty_minutes": 60,
-		"reset_task_progress": true
+		"reset_task_progress": false
 	},
 	"battle": {
 		"minutes_per_round": 3,
@@ -109,8 +112,8 @@
 		"_comment": "Step 1 from the start; step 2 and 3 at these totals. Step 3 = the first question = end of the prototype.",
 		"step_thresholds": [
 			0,
-			5,
-			11
+			4,
+			8
 		],
 		"final_step": 3,
 		"awards": {
@@ -118,7 +121,9 @@
 			"hid_before_heroes": 1,
 			"warned_colleague": 1,
 			"all_tasks_done": 1,
-			"no_incidents": 1
+			"no_incidents": 1,
+			"read_heroes": 1,
+			"ally_hurt": -1
 		}
 	},
 	"night": {
@@ -126,5 +131,13 @@
 	},
 	"debug": {
 		"show_trust": false
+	},
+	"screens": {
+		"slime_speed": 90,
+		"travel_minutes": 15,
+		"spot_radius": 22,
+		"hero_warning_minutes": 20,
+		"focus_padding": 4,
+		"hero_cross_seconds_min": 6
 	}
 }

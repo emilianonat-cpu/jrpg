@@ -6,17 +6,22 @@ signal ticked(prev: float, now: float)
 
 var minutes: float = 360.0
 var running := false
+## Changes every start_day(): a screen stops the clock only if it is still its day.
+var session := 0
 var _pauses: Dictionary = {}
 
 
 func start_day() -> void:
+	session += 1
 	_pauses.clear()
 	minutes = DataFile.to_minutes(Rules.get_value("clock.day_start", "06:00"))
 	running = true
 	ticked.emit(minutes - 0.001, minutes)
 
 
-func stop() -> void:
+func stop(only_session: int = -1) -> void:
+	if only_session >= 0 and only_session != session:
+		return
 	running = false
 
 

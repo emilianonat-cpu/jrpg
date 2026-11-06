@@ -25,6 +25,7 @@ var outcome := ""
 var plans: Dictionary = {}      # hero id -> action id for this round
 var ally_incidents := 0
 var calls_left := 0
+var looked := false
 var verb_handlers: Dictionary = {}
 
 var _hero_defs: Dictionary = {}
@@ -202,7 +203,7 @@ func resolve(verb: String, arg: String = "") -> Array:
 
 func result() -> Dictionary:
 	return {"outcome": outcome, "item": str(slime.get("item", "")), "rounds": round_no,
-		"ally_incidents": ally_incidents, "boredom": boredom}
+		"ally_incidents": ally_incidents, "boredom": boredom, "looked": looked}
 
 
 func _perform(h: Dictionary, action: String, ev: Array) -> bool:
@@ -309,6 +310,7 @@ func _log(ev: Array, key: String, args: Dictionary) -> void:
 # ---- verbs -------------------------------------------------------------------
 
 func _verb_look(_arg: String, ev: Array) -> void:
+	looked = true
 	_log(ev, "battle.log.look", {})
 	var preview := {}
 	var n := Rules.integer("battle.look.turns", 2)
