@@ -1,0 +1,8 @@
+{
+	"_comment": "Things Slayme can absorb. name = id in names.json, art = id in the art pack.",
+	"shard": { "name": "item_shard", "art": "item_shard" },
+	"coin":  { "name": "item_coin",  "art": "item_coin" },
+	"seed":  { "name": "item_seed",  "art": "item_seed" },
+	"mud":   { "name": "item_mud",   "art": "item_mud" },
+	"spores": { "name": "item_spores", "art": "item_spores" }
+}

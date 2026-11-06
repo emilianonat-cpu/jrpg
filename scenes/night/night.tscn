@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/night/night.gd" id="1_night"]
+[ext_resource type="Script" path="res://core/art_sprite.gd" id="2_sprite"]
+
+[node name="Night" type="Node"]
+script = ExtResource("1_night")
+
+[node name="Background" type="Sprite2D" parent="."]
+centered = false
+script = ExtResource("2_sprite")

@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/end/end.gd" id="1_end"]
+[ext_resource type="Script" path="res://core/art_sprite.gd" id="2_sprite"]
+[ext_resource type="Script" path="res://core/choice_list.gd" id="3_choice"]
+
+[node name="End" type="Node"]
+script = ExtResource("1_end")
+
+[node name="Background" type="Sprite2D" parent="."]
+centered = false
+script = ExtResource("2_sprite")
+
+[node name="UI" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Menu" type="GridContainer" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_choice")

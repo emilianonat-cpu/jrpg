@@ -1,0 +1,15 @@
+{
+	"_comment": "What is around Slayme when a fight starts (map objects with battle_terrain within world.battle_terrain_radius). absorb effects: item, defense_bonus (amount in rules), heavy (cannot flee), sleep_next_actor.",
+	"mud": {
+		"label": "terrain.mud",
+		"absorb": { "item": "mud", "defense_bonus": true, "heavy": true },
+		"absorb_log": "battle.log.absorb_mud"
+	},
+	"blue_mushroom": {
+		"label": "terrain.blue_mushroom",
+		"absorb": { "item": "spores", "sleep_next_actor": true },
+		"absorb_log": "battle.log.absorb_spores"
+	},
+	"bush": { "label": "terrain.bush", "cover": true },
+	"big_mushroom": { "label": "terrain.big_mushroom", "cover": true }
+}

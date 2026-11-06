@@ -1,0 +1,9 @@
+{
+	"_comment": "The colleague by the path. warn = talked to within world.warn_window_minutes before a hero pass.",
+	"idle": [ { "speaker": "colleague", "text": "dlg.colleague.idle" } ],
+	"warn": [
+		{ "speaker": "", "text": "dlg.colleague.warn_narration" },
+		{ "speaker": "colleague", "text": "dlg.colleague.warn_reply" }
+	],
+	"warned_already": [ { "speaker": "colleague", "text": "dlg.colleague.warned_already" } ]
+}

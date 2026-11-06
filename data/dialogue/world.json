@@ -1,0 +1,31 @@
+{
+	"_comment": "Short world messages (board, bells, incidents).",
+	"bell_morning": [
+		{
+			"speaker": "",
+			"text": "world.bell_morning"
+		}
+	],
+	"bell_evening": [
+		{
+			"speaker": "",
+			"text": "world.bell_evening"
+		},
+		{
+			"speaker": "",
+			"text": "world.walk_home_hint"
+		}
+	],
+	"incident": [
+		{
+			"speaker": "",
+			"text": "world.incident_respawn"
+		}
+	],
+	"day_end": [
+		{
+			"speaker": "",
+			"text": "world.day_end"
+		}
+	]
+}

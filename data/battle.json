@@ -1,0 +1,61 @@
+{
+	"_comment": "Slayme's verbs (no menu: a body). needs: absorbable | cover | ally_call. hero_menu = the classic menu the heroes have, shown at the top.",
+	"slime_character": "slime_generic",
+	"ally_character": "pool_mate",
+	"background": "bg_battle_meadow",
+	"slime_art": "slime_battle",
+	"ally_art": "slime_battle_ally",
+	"hero_menu": [
+		{
+			"id": "attack",
+			"label": "menu.attack"
+		},
+		{
+			"id": "magic",
+			"label": "menu.magic"
+		},
+		{
+			"id": "item",
+			"label": "menu.item"
+		},
+		{
+			"id": "run",
+			"label": "menu.run"
+		}
+	],
+	"verbs": [
+		{
+			"id": "look",
+			"label": "verb.look"
+		},
+		{
+			"id": "defend",
+			"label": "verb.defend"
+		},
+		{
+			"id": "absorb",
+			"label": "verb.absorb",
+			"needs": "absorbable"
+		},
+		{
+			"id": "hide",
+			"label": "verb.hide",
+			"needs": "cover"
+		},
+		{
+			"id": "call_help",
+			"label": "verb.call_help",
+			"needs": "ally_call"
+		},
+		{
+			"id": "flee",
+			"label": "verb.flee"
+		}
+	],
+	"boredom_lines": {
+		"2": "battle.bored.1",
+		"3": "battle.bored.2",
+		"4": "battle.bored.3"
+	},
+	"music_intro": "fanfare"
+}

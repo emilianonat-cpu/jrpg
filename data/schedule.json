@@ -1,0 +1,33 @@
+{
+	"_comment": "The day's timetable. hero_pass times are shifted by today's variation (hero_delay). colleague_incident = a pool mate has an incident in the background and pops back at the Pool with the bell. day_end = Slayme is taken home if still out.",
+	"events": [
+		{
+			"time": "06:00",
+			"event": "bell_morning"
+		},
+		{
+			"time": "09:00",
+			"event": "hero_pass"
+		},
+		{
+			"time": "09:25",
+			"event": "colleague_incident"
+		},
+		{
+			"time": "14:00",
+			"event": "hero_pass"
+		},
+		{
+			"time": "14:20",
+			"event": "colleague_incident"
+		},
+		{
+			"time": "17:00",
+			"event": "bell_evening"
+		},
+		{
+			"time": "18:00",
+			"event": "day_end"
+		}
+	]
+}

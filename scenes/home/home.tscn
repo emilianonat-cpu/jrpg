@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/home/home.gd" id="1_home"]
+[ext_resource type="Script" path="res://core/art_sprite.gd" id="2_sprite"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="3_dlg"]
+
+[node name="Home" type="Node"]
+script = ExtResource("1_home")
+
+[node name="Background" type="Sprite2D" parent="."]
+centered = false
+script = ExtResource("2_sprite")
+
+[node name="Objects" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Dialogue" parent="." instance=ExtResource("3_dlg")]

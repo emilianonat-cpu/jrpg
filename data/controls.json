@@ -1,0 +1,9 @@
+{
+	"_comment": "Input actions. keys = Godot key names; joy_buttons: 0 A, 1 B, 11 up, 12 down, 13 left, 14 right; joy_axes: [axis, direction].",
+	"move_left":  { "keys": ["Left", "A"],  "joy_buttons": [13], "joy_axes": [[0, -1.0]] },
+	"move_right": { "keys": ["Right", "D"], "joy_buttons": [14], "joy_axes": [[0, 1.0]] },
+	"move_up":    { "keys": ["Up", "W"],    "joy_buttons": [11], "joy_axes": [[1, -1.0]] },
+	"move_down":  { "keys": ["Down", "S"],  "joy_buttons": [12], "joy_axes": [[1, 1.0]] },
+	"interact":   { "keys": ["Z", "Enter", "Space"], "joy_buttons": [0] },
+	"cancel":     { "keys": ["X", "Escape", "Backspace"], "joy_buttons": [1] }
+}

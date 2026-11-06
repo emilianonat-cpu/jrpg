@@ -1,0 +1,37 @@
+; Engine configuration file.
+; Edit through Project > Project Settings in the Godot editor when possible.
+
+config_version=5
+
+[application]
+
+config/name="SLAYME (prototype)"
+config/description="Vertical slice skeleton. All names, texts, rules and art live in data/ and art/packs/."
+run/main_scene="res://scenes/main/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.png"
+
+[autoload]
+
+Hooks="*res://core/hooks.gd"
+Rules="*res://core/rules.gd"
+Content="*res://core/content.gd"
+Art="*res://core/art.gd"
+Controls="*res://core/controls.gd"
+Clock="*res://core/clock.gd"
+GameState="*res://core/game_state.gd"
+
+[display]
+
+window/size/viewport_width=320
+window/size/viewport_height=180
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0

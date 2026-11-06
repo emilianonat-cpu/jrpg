@@ -1,0 +1,130 @@
+{
+	"_comment": "Central rules registry. Every gameplay number lives here. Override without touching this file: user://rules_override.json (same shape) or Rules.set_override() at runtime.",
+	"text": {
+		"language": "en"
+	},
+	"art": {
+		"pack": "placeholder"
+	},
+	"input": {
+		"mouse_enabled": false
+	},
+	"ui": {
+		"font_size": 6,
+		"text_color": "#f4f0e6",
+		"line_spacing": 0,
+		"battle_log_delay": 0.9,
+		"hero_cursor_step": 0.12,
+		"slime_panel_text_color": "#2a2420"
+	},
+	"clock": {
+		"_comment": "6:00-18:00 in about 6-8 real minutes",
+		"day_start": "06:00",
+		"minutes_per_second": 1.8,
+		"pause_in_dialogue": true
+	},
+	"world": {
+		"slime_speed": 55,
+		"interact_radius": 16,
+		"encounter_radius": 18,
+		"battle_terrain_radius": 48,
+		"hero_walk_speed": 16,
+		"warn_window_minutes": 60,
+		"hero_spacing": 14,
+		"break_radius": 14,
+		"thief_stop_seconds": 3.0,
+		"respawn_hidden_seconds": 2.0
+	},
+	"incident": {
+		"clock_penalty_minutes": 60,
+		"reset_task_progress": true
+	},
+	"battle": {
+		"minutes_per_round": 3,
+		"min_damage": 0,
+		"slime": {
+			"_comment": "The Slime is ALWAYS weak and tiny: one normal hit is an incident.",
+			"max_hp": 3,
+			"defend_multiplier": 0.5
+		},
+		"ally": {
+			"max_hp": 3,
+			"max_calls": 1,
+			"draws_aggro": true
+		},
+		"look": {
+			"turns": 2
+		},
+		"boredom": {
+			"per_round": 1,
+			"hide_bonus": 1,
+			"out_of_mp_bonus": 1,
+			"threshold": 5
+		},
+		"heroes": {
+			"hero_sword": {
+				"mp": 0
+			},
+			"hero_mage": {
+				"mp": 12
+			},
+			"hero_thief": {
+				"mp": 0
+			}
+		},
+		"actions": {
+			"attack": {
+				"damage": 4
+			},
+			"prepare_brave": {
+				"damage": 0
+			},
+			"brave_slash": {
+				"damage": 8
+			},
+			"fire": {
+				"damage": 1,
+				"mp_cost": 3
+			},
+			"thunder": {
+				"damage": 5,
+				"mp_cost": 3
+			},
+			"poke": {
+				"damage": 1
+			},
+			"pickpocket": {
+				"damage": 0
+			}
+		},
+		"terrain": {
+			"consumed_on_absorb": true,
+			"mud": {
+				"defense_bonus": 1
+			}
+		},
+		"_comment": "PLACEHOLDER balance. Every hero acts each round: Slayme survives round 1 only by bracing, hiding or calling for help, then runs away during a flee window (prepare_brave, thunder)."
+	},
+	"trust": {
+		"_comment": "Step 1 from the start; step 2 and 3 at these totals. Step 3 = the first question = end of the prototype.",
+		"step_thresholds": [
+			0,
+			5,
+			11
+		],
+		"final_step": 3,
+		"awards": {
+			"leftover_finished": 2,
+			"hid_before_heroes": 1,
+			"warned_colleague": 1,
+			"all_tasks_done": 1,
+			"no_incidents": 1
+		}
+	},
+	"night": {
+		"seconds": 2.5
+	},
+	"debug": {
+		"show_trust": false
+	}
+}
