@@ -7,6 +7,7 @@ extends Node
 
 var _failures := 0
 var _main: Node = null
+var walked_home := false
 
 
 func _ready() -> void:
@@ -151,6 +152,7 @@ func _test_full_day() -> void:
 	Rules.set_override("world.hero_walk_speed", 400.0)
 	var seen := {}
 	var battle_seen := false
+	walked_home = false
 	var start_day := GameState.day
 	var main: Node = load("res://scenes/main/main.tscn").instantiate()
 	main.first_screen = "meadow"
@@ -171,6 +173,8 @@ func _test_full_day() -> void:
 	check(seen.has("night"), "night")
 	check(GameState.day == start_day + 1, "next day started (day %d)" % GameState.day)
 	check(GameState.has_memory(), "memory written at night")
+	check(int(GameState.stats.get("pots_broken", 0)) > 0, "the thief broke pots on the path (%d)" % int(GameState.stats.get("pots_broken", 0)))
+	check(walked_home, "walked home past the sign after the evening bell")
 	main.queue_free()
 	Rules.clear_all_overrides()
 	GameState.forget()
@@ -193,6 +197,15 @@ func _autopilot(main: Node) -> void:
 				if verbs.items[i].id == want:
 					verbs.chosen.emit(want, i)
 					return
+		return
+	if main.current_id == "meadow" and screen.day.flags.get("shift_over", false) and not screen.busy:
+		# Evening: walk to the sign and go home.
+		Rules.set_override("clock.minutes_per_second", 1.0)
+		var sign: Node2D = screen.objects.get_node("home_sign")
+		screen.player.position = screen.player.position.move_toward(sign.position, 8.0)
+		if screen.focus == sign:
+			walked_home = true
+			screen.interact(sign)
 		return
 	if main.current_id == "meadow" and screen.party != null and not screen.busy:
 		# Walk Slayme onto the path, into the heroes.

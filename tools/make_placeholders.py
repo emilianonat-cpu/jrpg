@@ -122,6 +122,9 @@ sprite("bush", blob(22, 16, MUTED["bush"], squash=False))
 sprite("mushroom_big", blob(16, 20, MUTED["mush"], squash=False))
 sprite("mushroom_blue", blob(9, 9, MUTED["mush_blue"], squash=False))
 sprite("mud", blob(30, 14, MUTED["mud"], squash=False))
+sprite("path_pot", box(8, 9, MUTED["pot"]))
+sprite("path_pot_broken", box(8, 4, (130, 85, 60)), offset=[0, 2])
+sprite("home_sign", box(10, 14, MUTED["wood"], label_band=MUTED["paper"]), offset=[0, -4])
 
 # --- items (seen through Slayme's jelly body) ---
 for item, color in [("shard", MUTED["pot"]), ("coin", MUTED["coin"]), ("seed", MUTED["seed"]),

@@ -30,7 +30,10 @@
 		"battle_terrain_radius": 48,
 		"hero_walk_speed": 16,
 		"warn_window_minutes": 60,
-		"hero_spacing": 14
+		"hero_spacing": 14,
+		"break_radius": 14,
+		"thief_stop_seconds": 3.0,
+		"respawn_hidden_seconds": 2.0
 	},
 	"incident": {
 		"clock_penalty_minutes": 60,

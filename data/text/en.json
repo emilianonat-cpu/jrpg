@@ -121,5 +121,9 @@
 	"battle.bored.2": "{name:hero_mage}: Is it... doing anything?",
 	"battle.bored.3": "{name:hero_sword}: Nothing personal. I've got a quota.",
 	"msg.spat_out": "Spat it out.",
-	"hud.trust": "trust {n} (step {s})"
+	"hud.trust": "trust {n} (step {s})",
+	"prompt.exit_home": "Go home",
+	"msg.shift_not_over": "The shift is not over.",
+	"world.day_end": "It's dark. {name:protagonist} finds the way home anyway.",
+	"world.walk_home_hint": "Home is past the sign, bottom left."
 }

@@ -10,12 +10,22 @@
 		{
 			"speaker": "",
 			"text": "world.bell_evening"
+		},
+		{
+			"speaker": "",
+			"text": "world.walk_home_hint"
 		}
 	],
 	"incident": [
 		{
 			"speaker": "",
 			"text": "world.incident_respawn"
+		}
+	],
+	"day_end": [
+		{
+			"speaker": "",
+			"text": "world.day_end"
 		}
 	]
 }

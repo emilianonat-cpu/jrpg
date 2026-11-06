@@ -5,6 +5,7 @@ extends Node2D
 var data: Dictionary = {}
 var kind := ""
 var sprite: ArtSprite
+var broken := false
 
 
 func setup(d: Dictionary) -> void:
@@ -31,3 +32,11 @@ func is_interactable() -> bool:
 
 func prompt() -> String:
 	return Content.text("prompt." + kind)
+
+
+## Breakable objects (pots by the path) swap to their broken art.
+func break_object() -> void:
+	if broken:
+		return
+	broken = true
+	sprite.set_art(str(data.get("broken_art", data.get("art", ""))))

@@ -1,22 +1,40 @@
 {
-	"_comment": "Hero battle patterns. Heroes are predictable: fixed patterns the player learns, Slayme forgets. art_world / art_battle = art pack ids. Numbers (MP, damage) are in rules.json.",
+	"_comment": "Hero battle patterns. Heroes are predictable: fixed patterns the player learns, Slayme forgets. art_world / art_battle = art pack ids. Numbers (MP, damage) are in rules.json. breaks_pots = in the world this hero smashes breakable pots along the path.",
 	"heroes": {
 		"hero_sword": {
 			"art_world": "hero_sword",
 			"art_battle": "hero_sword_battle",
-			"pattern": ["attack", "prepare_brave", "brave_slash"]
+			"pattern": [
+				"attack",
+				"prepare_brave",
+				"brave_slash"
+			]
 		},
 		"hero_mage": {
 			"art_world": "hero_mage",
 			"art_battle": "hero_mage_battle",
-			"pattern": ["fire", "fire", "thunder"],
+			"pattern": [
+				"fire",
+				"fire",
+				"thunder"
+			],
 			"no_mp_action": "out_of_mp"
 		},
 		"hero_thief": {
 			"art_world": "hero_thief",
 			"art_battle": "hero_thief_battle",
-			"pattern": ["pickpocket", "poke", "poke"],
-			"overrides": [ { "when": "slime_has_item", "action": "pickpocket" } ]
+			"pattern": [
+				"pickpocket",
+				"poke",
+				"poke"
+			],
+			"overrides": [
+				{
+					"when": "slime_has_item",
+					"action": "pickpocket"
+				}
+			],
+			"breaks_pots": true
 		}
 	}
 }

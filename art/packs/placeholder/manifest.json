@@ -123,6 +123,23 @@
 		"mud": {
 			"file": "mud.png"
 		},
+		"path_pot": {
+			"file": "path_pot.png"
+		},
+		"path_pot_broken": {
+			"file": "path_pot_broken.png",
+			"offset": [
+				0,
+				2
+			]
+		},
+		"home_sign": {
+			"file": "home_sign.png",
+			"offset": [
+				0,
+				-4
+			]
+		},
 		"item_shard": {
 			"file": "item_shard.png"
 		},

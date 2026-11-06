@@ -45,7 +45,7 @@ tests/       test automatico
 tools/       strumenti di produzione (ignorati da Godot)
 ```
 
-Flusso: `title` → `meadow` (06:00-17:00, con la battaglia sopra) → `home` → `night` (salva la memoria) → `meadow`... finché il mentore arriva al gradino 3 di fiducia e fa la sua domanda → `end`.
+Flusso: `title` → `meadow` (06:00-17:00 al lavoro, poi si torna a casa a piedi passando dal cartello; alle 18:00 si va a casa comunque)  → `home` → `night` (salva la memoria) → `meadow`... finché il mentore arriva al gradino 3 di fiducia e fa la sua domanda → `end`.
 
 ## Hook: ogni meccanica si può cambiare a runtime
 
@@ -59,7 +59,7 @@ Hooks.on("day.started", func(ctx): print("giorno ", ctx.day))
 ```
 
 Filtri disponibili: `rule:<chiave>`, `text`, `name`, `table:<file>`, `art.id`, `clock.advance`, `trust.gain`, `day.variation`, `memory.write`, `memory.read`, `dialogue.line`, `screen.next`, `meadow.interact`, `battle.damage`, `battle.flee`, `battle.target`, `battle.condition`, `battle.boredom`.
-Eventi: `game.new`, `day.started`, `day.ended`, `task.completed`, `trust.changed`, `heroes.appeared`, `slime.incident`, `meadow.ready`, `home.ready`, `screen.entered`, `rules.changed`, `art.pack_changed`, `battle.created` (per aggiungere verbi nuovi a `verb_handlers`), `battle.planned`, `battle.round_end`, `schedule.<evento>` (per eventi nuovi in `schedule.json`), `prototype.end`.
+Eventi: `game.new`, `day.started`, `day.ended`, `task.completed`, `trust.changed`, `heroes.appeared`, `slime.incident`, `pot.broken`, `colleague.incident`, `meadow.go_home`, `meadow.ready`, `home.ready`, `screen.entered`, `rules.changed`, `art.pack_changed`, `battle.created` (per aggiungere verbi nuovi a `verb_handlers`), `battle.planned`, `battle.round_end`, `schedule.<evento>` (per eventi nuovi in `schedule.json`), `prototype.end`.
 
 In più `user://rules_override.json` (stessa forma di `rules.json`) cambia le regole senza toccare il progetto.
 
@@ -70,6 +70,10 @@ Tastiera o gamepad, il mouse non fa niente (regola `input.mouse_enabled`).
 - Muoversi: frecce / WASD / croce o levetta
 - Interagire, avanzare, scegliere: Z / Invio / Spazio / A
 - Annullare, sputare ciò che si ha dentro: X / Esc / B
+
+## Esportare per Windows
+
+Il preset "Windows Desktop" è in `export_presets.cfg` e include i file `data/*.json` e i manifest dei pacchetti, che Godot da solo non esporterebbe. Servono i template di esportazione di Godot 4.7.2 (Editor → Gestisci template di esportazione), poi Progetto → Esporta. L'eseguibile finisce in `build/windows/`.
 
 ## Test
 
@@ -83,5 +87,5 @@ Controlla registro delle regole, hook, nomi, pacchetto arte, lavori, battaglia (
 ## Cosa è segnaposto o manca
 
 - Tutti i testi, i numeri di bilanciamento e la grafica.
-- Mancano: il Ladro che rompe i vasi fuori dalla battaglia, i colleghi che ricompaiono alla Pozza, l'animazione di ritorno a casa, l'audio oltre a campanella/fanfara/colpo.
+- Manca l'audio oltre a campanella, fanfara e colpo.
 - Fuori dal prototipo per scelta: lo Strumento, l'ottimizzazione, lo sciopero, il secondo atto, i finali.

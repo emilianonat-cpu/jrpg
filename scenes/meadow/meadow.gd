@@ -35,12 +35,15 @@ func enter(_payload: Dictionary) -> void:
 		"bell_morning": _ev_bell_morning,
 		"hero_pass": _ev_hero_pass,
 		"bell_evening": _ev_bell_evening,
+		"colleague_incident": _ev_colleague_incident,
+		"day_end": _ev_day_end,
 	}
 	interact_handlers = {
 		"board": _use_board,
 		"npc": _use_npc,
 		"task_source": _use_source,
 		"task_sink": _use_sink,
+		"exit_home": _use_exit_home,
 	}
 	map = Content.dict("maps/meadow")
 	GameState.start_day()
@@ -111,8 +114,11 @@ func _process(_delta: float) -> void:
 		return
 	camera.position = player.position
 	player.frozen = busy
+	if party != null:
+		party.paused = busy
 	if busy:
 		return
+	_check_breakables()
 	_update_hidden()
 	_update_focus()
 	_check_encounter()
@@ -139,6 +145,28 @@ func _update_focus() -> void:
 	if best != focus:
 		focus = best
 		hud.set_prompt(focus.prompt() if focus != null else "")
+
+
+## Heroes with breaks_pots smash the pots along the path. That is why pots
+## always break right where the slimes work.
+func _check_breakables() -> void:
+	if party == null:
+		return
+	var defs: Dictionary = Content.dict("heroes").get("heroes", {})
+	var r := Rules.num("world.break_radius", 14)
+	for id in party.members:
+		if not bool(defs.get(id, {}).get("breaks_pots", false)):
+			continue
+		var s := party.sprite_of(id)
+		if s == null or not s.visible:
+			continue
+		for o in objects_of_kind("breakable"):
+			if not o.broken and o.position.distance_to(s.position) <= r:
+				o.break_object()
+				GameState.stat_add("pots_broken")
+				Hooks.emit("pot.broken", {"object": o, "hero": id, "screen": self})
+				if bool(day.variation.get("thief_stops", false)):
+					party.hold(Rules.num("world.thief_stop_seconds", 3.0))
 
 
 func _check_encounter() -> void:
@@ -313,9 +341,41 @@ func _ev_hero_pass() -> void:
 
 func _ev_bell_evening() -> void:
 	Art.play_sound("bell")
+	day.flags["shift_over"] = true
 	await say(Content.dialogue("world", "bell_evening"))
+
+
+## Too late: Slayme goes home anyway.
+func _ev_day_end() -> void:
+	await say(Content.dialogue("world", "day_end"))
+	go_home()
+
+
+func _use_exit_home(_o: WorldObject) -> void:
+	if day.flags.get("shift_over", false):
+		go_home()
+	else:
+		hud.toast(Content.text("msg.shift_not_over"))
+
+
+func go_home() -> void:
 	busy = true
+	Hooks.emit("meadow.go_home", {"screen": self})
 	go("home")
+
+
+## In the background, a colleague has an incident and pops back at the Pool.
+func _ev_colleague_incident() -> void:
+	var mates := objects.get_children().filter(func(n): return n is WorldObject and n.object_id().begins_with("pool_mate_"))
+	if mates.is_empty():
+		return
+	var mate: WorldObject = mates[randi() % mates.size()]
+	mate.visible = false
+	await get_tree().create_timer(Rules.num("world.respawn_hidden_seconds", 2.0)).timeout
+	if is_instance_valid(mate):
+		mate.visible = true
+		Art.play_sound("bell")
+		Hooks.emit("colleague.incident", {"object": mate, "screen": self})
 
 
 # ---- battle ----------------------------------------------------------------------
