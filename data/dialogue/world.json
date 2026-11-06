@@ -1,0 +1,21 @@
+{
+	"_comment": "Short world messages (board, bells, incidents).",
+	"bell_morning": [
+		{
+			"speaker": "",
+			"text": "world.bell_morning"
+		}
+	],
+	"bell_evening": [
+		{
+			"speaker": "",
+			"text": "world.bell_evening"
+		}
+	],
+	"incident": [
+		{
+			"speaker": "",
+			"text": "world.incident_respawn"
+		}
+	]
+}

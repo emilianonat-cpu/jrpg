@@ -1,0 +1,23 @@
+{
+	"_comment": "Mentor dialogue by trust step. Line: speaker (id in names.json, empty = narration), text (key in text/en.json), optional choices (list of text keys). greeting_step_N = first talk of the day; idle_step_N = later talks; question = final step.",
+	"greeting_step_1": [
+		{ "speaker": "mentor", "text": "dlg.mentor.greet_1" },
+		{ "speaker": "mentor", "text": "dlg.mentor.tasks" },
+		{ "speaker": "mentor", "text": "dlg.mentor.tip_1" }
+	],
+	"greeting_step_2": [
+		{ "speaker": "mentor", "text": "dlg.mentor.greet_2" },
+		{ "speaker": "mentor", "text": "dlg.mentor.tasks" },
+		{ "speaker": "mentor", "text": "dlg.mentor.colleagues" }
+	],
+	"greeting_step_3": [
+		{ "speaker": "mentor", "text": "dlg.mentor.greet_2" }
+	],
+	"idle_step_1": [ { "speaker": "mentor", "text": "dlg.mentor.idle_1" } ],
+	"idle_step_2": [ { "speaker": "mentor", "text": "dlg.mentor.idle_2" } ],
+	"idle_step_3": [ { "speaker": "mentor", "text": "dlg.mentor.idle_2" } ],
+	"question": [
+		{ "speaker": "mentor", "text": "dlg.mentor.question_1" },
+		{ "speaker": "mentor", "text": "dlg.mentor.question_2", "choices": ["dlg.protagonist.silence"] }
+	]
+}

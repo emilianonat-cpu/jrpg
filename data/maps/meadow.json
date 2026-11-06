@@ -1,0 +1,34 @@
+{
+	"_comment": "The Meadow. Positions in pixels. kind: pool | board | npc | task_source | task_sink | cover | terrain | decor. art = art pack id. Objects with `task` only appear if that task exists today. battle_terrain = id in terrain.json available in fights nearby.",
+	"size": [480, 270],
+	"background": "bg_meadow",
+	"spawn": [60, 72],
+	"path": [[-24, 160], [120, 150], [240, 166], [360, 150], [504, 160]],
+	"pool_mates": { "count": 10, "art": "slime_pool_mate", "center": [60, 60], "radius": [26, 10] },
+	"objects": [
+		{ "id": "pool", "kind": "pool", "art": "pool", "pos": [60, 60] },
+		{ "id": "board", "kind": "board", "art": "board", "pos": [104, 40] },
+		{ "id": "mentor", "kind": "npc", "character": "mentor", "art": "mentor", "pos": [124, 56], "talk": { "mode": "trust_owner", "file": "mentor" } },
+		{ "id": "colleague", "kind": "npc", "character": "colleague", "art": "colleague", "pos": [252, 186], "talk": { "mode": "warn", "file": "colleague" } },
+
+		{ "id": "pot_shards", "kind": "task_source", "task": "pot", "art": "pot_shards", "pos": [150, 178] },
+		{ "id": "pot_pedestal", "kind": "task_sink", "task": "pot", "art": "pedestal", "pos": [180, 194] },
+		{ "id": "coin_sack", "kind": "task_source", "task": "chest", "art": "coin_sack", "pos": [300, 92] },
+		{ "id": "old_tree", "kind": "decor", "art": "old_tree", "pos": [348, 54] },
+		{ "id": "old_chest", "kind": "task_sink", "task": "chest", "art": "chest", "pos": [340, 76] },
+		{ "id": "seed_pile", "kind": "task_source", "task": "grass", "art": "seed_pile", "pos": [404, 224] },
+		{ "id": "trampled_grass", "kind": "task_sink", "task": "grass", "art": "trampled_grass", "pos": [436, 200] },
+
+		{ "id": "pot_shards_2", "kind": "task_source", "task": "leftover_pot", "art": "pot_shards", "pos": [232, 128] },
+		{ "id": "pedestal_2", "kind": "task_sink", "task": "leftover_pot", "art": "pedestal_glued", "pos": [208, 132] },
+		{ "id": "coin_sack_2", "kind": "task_source", "task": "leftover_chest", "art": "coin_sack", "pos": [262, 222] },
+		{ "id": "chest_2", "kind": "task_sink", "task": "leftover_chest", "art": "chest_half", "pos": [292, 236] },
+
+		{ "id": "bush_1", "kind": "cover", "art": "bush", "pos": [130, 128], "radius": 11, "battle_terrain": "bush" },
+		{ "id": "bush_2", "kind": "cover", "art": "bush", "pos": [330, 182], "radius": 11, "battle_terrain": "bush" },
+		{ "id": "bush_3", "kind": "cover", "art": "bush", "pos": [60, 200], "radius": 11, "battle_terrain": "bush" },
+		{ "id": "mushroom_big", "kind": "cover", "art": "mushroom_big", "pos": [282, 140], "radius": 10, "battle_terrain": "big_mushroom" },
+		{ "id": "mud_1", "kind": "terrain", "art": "mud", "pos": [200, 218], "battle_terrain": "mud" },
+		{ "id": "blue_mushroom_1", "kind": "terrain", "art": "mushroom_blue", "pos": [380, 132], "battle_terrain": "blue_mushroom" }
+	]
+}

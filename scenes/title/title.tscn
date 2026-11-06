@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/title/title.gd" id="1_title"]
+[ext_resource type="Script" path="res://core/art_sprite.gd" id="2_sprite"]
+[ext_resource type="Script" path="res://core/choice_list.gd" id="3_choice"]
+
+[node name="Title" type="Node"]
+script = ExtResource("1_title")
+
+[node name="Background" type="Sprite2D" parent="."]
+centered = false
+script = ExtResource("2_sprite")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Center" type="VBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="UI/Center"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="UI/Center"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="UI/Center"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Menu" type="GridContainer" parent="UI/Center"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_choice")

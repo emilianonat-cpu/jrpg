@@ -1,0 +1,11 @@
+{
+	"_comment": "Home: one room. Characters are placed here; the evening dialogue is in dialogue/home.json.",
+	"background": "bg_home",
+	"objects": [
+		{ "id": "protagonist", "art": "slime", "pos": [150, 120] },
+		{ "id": "partner", "art": "partner", "pos": [180, 112] },
+		{ "id": "kid", "art": "kid", "pos": [250, 130] },
+		{ "id": "kid_toy", "art": "toy_slime", "pos": [264, 136] }
+	],
+	"dialogue": { "file": "home", "sequence": "evening" }
+}

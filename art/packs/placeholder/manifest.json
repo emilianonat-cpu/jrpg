@@ -1,0 +1,201 @@
+{
+	"_comment": "PLACEHOLDER pack. Every id the game uses. file = image in this folder; frames = horizontal strip; fps; centered; offset [x,y]; ui: margin/padding for 9-slice frames.",
+	"sprites": {
+		"slime": {
+			"file": "slime.png",
+			"frames": 2,
+			"fps": 3
+		},
+		"slime_pool_mate": {
+			"file": "slime_pool_mate.png",
+			"frames": 2,
+			"fps": 2
+		},
+		"colleague": {
+			"file": "colleague.png",
+			"frames": 2,
+			"fps": 4
+		},
+		"slime_battle": {
+			"file": "slime_battle.png",
+			"frames": 2,
+			"fps": 3
+		},
+		"slime_battle_ally": {
+			"file": "slime_battle_ally.png",
+			"frames": 2,
+			"fps": 3
+		},
+		"toy_slime": {
+			"file": "toy_slime.png"
+		},
+		"mentor": {
+			"file": "mentor.png",
+			"frames": 2,
+			"fps": 2
+		},
+		"partner": {
+			"file": "partner.png",
+			"frames": 2,
+			"fps": 1
+		},
+		"kid": {
+			"file": "kid.png",
+			"frames": 2,
+			"fps": 4
+		},
+		"hero_sword": {
+			"file": "hero_sword.png",
+			"frames": 2,
+			"fps": 6
+		},
+		"hero_mage": {
+			"file": "hero_mage.png",
+			"frames": 2,
+			"fps": 6
+		},
+		"hero_thief": {
+			"file": "hero_thief.png",
+			"frames": 2,
+			"fps": 6
+		},
+		"hero_sword_battle": {
+			"file": "hero_sword_battle.png",
+			"frames": 4,
+			"fps": 8
+		},
+		"hero_mage_battle": {
+			"file": "hero_mage_battle.png",
+			"frames": 4,
+			"fps": 8
+		},
+		"hero_thief_battle": {
+			"file": "hero_thief_battle.png",
+			"frames": 4,
+			"fps": 8
+		},
+		"pool": {
+			"file": "pool.png"
+		},
+		"board": {
+			"file": "board.png",
+			"offset": [
+				0,
+				-6
+			]
+		},
+		"pot_shards": {
+			"file": "pot_shards.png"
+		},
+		"pedestal": {
+			"file": "pedestal.png"
+		},
+		"pedestal_glued": {
+			"file": "pedestal_glued.png"
+		},
+		"coin_sack": {
+			"file": "coin_sack.png"
+		},
+		"chest": {
+			"file": "chest.png"
+		},
+		"chest_half": {
+			"file": "chest_half.png"
+		},
+		"old_tree": {
+			"file": "old_tree.png"
+		},
+		"seed_pile": {
+			"file": "seed_pile.png"
+		},
+		"trampled_grass": {
+			"file": "trampled_grass.png"
+		},
+		"bush": {
+			"file": "bush.png"
+		},
+		"mushroom_big": {
+			"file": "mushroom_big.png"
+		},
+		"mushroom_blue": {
+			"file": "mushroom_blue.png"
+		},
+		"mud": {
+			"file": "mud.png"
+		},
+		"item_shard": {
+			"file": "item_shard.png"
+		},
+		"item_coin": {
+			"file": "item_coin.png"
+		},
+		"item_seed": {
+			"file": "item_seed.png"
+		},
+		"item_mud": {
+			"file": "item_mud.png"
+		},
+		"item_spores": {
+			"file": "item_spores.png"
+		},
+		"missing": {
+			"file": "missing.png"
+		}
+	},
+	"backgrounds": {
+		"bg_meadow": {
+			"file": "bg_meadow.png",
+			"centered": false
+		},
+		"bg_home": {
+			"file": "bg_home.png",
+			"centered": false
+		},
+		"bg_battle_meadow": {
+			"file": "bg_battle_meadow.png",
+			"centered": false
+		},
+		"bg_title": {
+			"file": "bg_title.png",
+			"centered": false
+		},
+		"bg_night": {
+			"file": "bg_night.png",
+			"centered": false
+		}
+	},
+	"ui": {
+		"panel_dialogue": {
+			"file": "panel_dialogue.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_hero_menu": {
+			"file": "panel_hero_menu.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_slime": {
+			"file": "panel_slime.png",
+			"margin": 3,
+			"padding": 4
+		},
+		"panel_hud": {
+			"file": "panel_hud.png",
+			"margin": 3,
+			"padding": 4
+		}
+	},
+	"fonts": {},
+	"sounds": {
+		"bell": {
+			"file": "bell.wav"
+		},
+		"fanfare": {
+			"file": "fanfare.wav"
+		},
+		"hit": {
+			"file": "hit.wav"
+		}
+	}
+}

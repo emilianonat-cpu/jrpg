@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1_hud"]
+
+[node name="Hud" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_hud")
+
+[node name="Top" type="PanelContainer" parent="."]
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 140.0
+offset_bottom = 16.0
+
+[node name="Row" type="HBoxContainer" parent="Top"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Day" type="Label" parent="Top/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Time" type="Label" parent="Top/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Carry" type="Label" parent="Top/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Tasks" type="PanelContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="List" type="VBoxContainer" parent="Tasks"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Prompt" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -26.0
+offset_right = 60.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+
+[node name="Toast" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -14.0
+offset_right = 150.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1

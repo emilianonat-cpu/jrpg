@@ -1,0 +1,7 @@
+{
+	"evening": [
+		{ "speaker": "partner", "text": "dlg.partner.how_was_today", "choices": ["dlg.protagonist.fine"] },
+		{ "speaker": "", "text": "dlg.home.kid_plays" },
+		{ "speaker": "kid", "text": "dlg.kid.play" }
+	]
+}

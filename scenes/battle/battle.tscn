@@ -1,0 +1,101 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/battle/battle.gd" id="1_battle"]
+[ext_resource type="Script" path="res://core/choice_list.gd" id="2_choice"]
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_battle")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 6
+
+[node name="HeroRow" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = 102.0
+grow_horizontal = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="LogPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 104.0
+offset_right = -4.0
+offset_bottom = 124.0
+grow_horizontal = 2
+
+[node name="Log" type="Label" parent="LogPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="SlimePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -54.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Row" type="HBoxContainer" parent="SlimePanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SlimeBox" type="VBoxContainer" parent="SlimePanel/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+
+[node name="SlimeSlot" type="Control" parent="SlimePanel/Row/SlimeBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 14)
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="SlimePanel/Row/SlimeBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Status" type="Label" parent="SlimePanel/Row/SlimeBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Verbs" type="GridContainer" parent="SlimePanel/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+script = ExtResource("2_choice")
+
+[node name="SubChoices" type="GridContainer" parent="SlimePanel/Row"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_choice")

@@ -1,0 +1,15 @@
+{
+	"_comment": "Daily variations, cycling. Every day is the same day, slightly different. defaults apply to all days.",
+	"defaults": {
+		"party": ["hero_sword", "hero_mage", "hero_thief"],
+		"hero_delay": 0,
+		"board_notice": "board.notice.default",
+		"adventurers": 6,
+		"leftover": {}
+	},
+	"variations": [
+		{ "leftover": { "task": "leftover_pot", "progress": 3 } },
+		{ "hero_delay": 10, "adventurers": 7, "leftover": { "task": "leftover_chest", "progress": 2 } },
+		{ "hero_delay": -10, "board_notice": "board.notice.sunny", "adventurers": 5, "leftover": { "task": "leftover_pot", "progress": 2 } }
+	]
+}

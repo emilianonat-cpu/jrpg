@@ -1,0 +1,9 @@
+{
+	"_comment": "The day's timetable. hero_pass times are shifted by today's variation (hero_delay).",
+	"events": [
+		{ "time": "06:00", "event": "bell_morning" },
+		{ "time": "09:00", "event": "hero_pass" },
+		{ "time": "14:00", "event": "hero_pass" },
+		{ "time": "17:00", "event": "bell_evening" }
+	]
+}

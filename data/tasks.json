@@ -1,0 +1,10 @@
+{
+	"_comment": "Maintenance jobs. Absorb `item` at the object with kind task_source and the same task id, release it at the task_sink. leftover = a colleague's half-done job: only the one chosen by today's variation exists.",
+	"tasks": [
+		{ "id": "pot",   "title": "task.pot",   "item": "shard", "amount": 3 },
+		{ "id": "chest", "title": "task.chest", "item": "coin",  "amount": 3 },
+		{ "id": "grass", "title": "task.grass", "item": "seed",  "amount": 3 },
+		{ "id": "leftover_pot",   "title": "task.leftover_pot",   "item": "shard", "amount": 4, "leftover": true },
+		{ "id": "leftover_chest", "title": "task.leftover_chest", "item": "coin",  "amount": 4, "leftover": true }
+	]
+}
