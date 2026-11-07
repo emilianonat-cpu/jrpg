@@ -21,24 +21,6 @@
 			"scale": 0.5,
 			"filter": "linear"
 		},
-		"board": {
-			"file": "board.png",
-			"scale": 0.5,
-			"filter": "linear",
-			"offset": [
-				0,
-				-12
-			]
-		},
-		"home_sign": {
-			"file": "home_sign.png",
-			"scale": 0.5,
-			"filter": "linear",
-			"offset": [
-				0,
-				-8
-			]
-		},
 		"mud": {
 			"file": "mud.png",
 			"scale": 0.5,

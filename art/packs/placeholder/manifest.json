@@ -466,6 +466,13 @@
 		},
 		"battle_bored": {
 			"file": "battle_bored.wav"
+		},
+		"hero_theme": {
+			"file": "hero_theme.wav",
+			"loop": true
+		},
+		"spotted": {
+			"file": "spotted.wav"
 		}
 	}
 }

@@ -1,5 +1,5 @@
 {
-	"_comment": "Hero battle patterns. Heroes are predictable: fixed patterns the player learns, Slayme forgets. art_world / art_battle = art pack ids. Numbers (MP, damage) are in rules.json. breaks_pots = in the world this hero smashes breakable pots along the path. route (screens mode) = which screens the party crosses, minutes after the pass starts. barks = short lines when they walk in (text keys), battle_barks = said at the start of a fight.",
+	"_comment": "Hero battle patterns. Heroes are predictable: fixed patterns the player learns, Slayme forgets. art_world / art_battle = art pack ids. Numbers (MP, damage) are in rules.json. breaks_pots = in the world this hero smashes breakable pots along the path. route (screens mode) = which screens the party crosses, minutes after the pass starts. barks = short lines when they walk in (text keys), battle_barks = said at the start of a fight. spot_lines = what the one who notices Slayme says (screens mode). stage (battle.json) = where each one stands in a fight.",
 	"heroes": {
 		"hero_sword": {
 			"art_world": "hero_sword",
@@ -14,6 +14,11 @@
 				"bark.sword.1",
 				"bark.sword.2",
 				"bark.sword.3"
+			],
+			"spot_lines": [
+				"spot.sword.1",
+				"spot.sword.2",
+				"spot.sword.3"
 			]
 		},
 		"hero_mage": {
@@ -30,6 +35,10 @@
 				"bark.mage.1",
 				"bark.mage.2",
 				"bark.mage.3"
+			],
+			"spot_lines": [
+				"spot.mage.1",
+				"spot.mage.2"
 			]
 		},
 		"hero_thief": {
@@ -51,6 +60,10 @@
 				"bark.thief.1",
 				"bark.thief.2",
 				"bark.thief.3"
+			],
+			"spot_lines": [
+				"spot.thief.1",
+				"spot.thief.2"
 			]
 		}
 	},

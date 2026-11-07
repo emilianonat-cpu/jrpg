@@ -197,8 +197,6 @@ save_sprite(sticker(oval(cut("hr_korin_lirios.jpg", (0.05, 0.30, 0.30, 0.95), (2
 save_sprite(sticker(oval(cut("hr_hoefnagel_bodegon.jpg", (0.25, 0.15, 0.75, 0.70), (16 * S, 20 * S))), turn=3), "mushroom_big")
 save_sprite(sticker(oval(cut("hr_wave.jpg", (0.02, 0.15, 0.62, 0.75), (44 * S, 18 * S)))), "pool")
 save_sprite(sticker(oval(cut("hr_wave.jpg", (0.0, 0.10, 0.70, 0.80), (84 * S, 26 * S)))), "pool_big")
-save_sprite(sticker(cut("hr_harnett_violin.jpg", (0.10, 0.45, 0.70, 0.95), (16 * S, 20 * S)), turn=-3), "board", offset=[0, -6 * S])
-save_sprite(sticker(cut("village-street.jpg", (0.83, 0.20, 0.95, 0.60), (10 * S, 14 * S)), turn=4), "home_sign", offset=[0, -4 * S])
 save_sprite(sticker(oval(cut("hr_harvesters.jpg", (0.40, 0.70, 0.60, 0.85), (30 * S, 14 * S)))), "mud")
 
 # ---- heroes: 0x72's DungeonTileset II (CC0), pasted as they are ----------------

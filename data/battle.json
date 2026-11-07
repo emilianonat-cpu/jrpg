@@ -1,5 +1,5 @@
 {
-	"_comment": "Slayme's verbs (no menu: a body). needs: absorbable | cover | ally_call. hero_menu = the classic menu the heroes have, shown at the top.",
+	"_comment": "Slayme's verbs (no menu: a body). needs: absorbable | cover | ally_call. hero_menu = the classic menu the heroes have, shown at the top. stage = the fight as the Heroes' scene: the place zoomed (zoom, focus_at = where the lane sits, 0 top..1 bottom), each Hero's spot (pos, scale over its battle art, enter_from = offset they walk in from and leave to, menu = their menu panel offset), Slayme's spot (small, his size). bored_turn = boredom level at which that Hero turns away.",
 	"slime_character": "slime_generic",
 	"ally_character": "pool_mate",
 	"background": "bg_battle_meadow",
@@ -63,5 +63,79 @@
 		"3": "battle.bored.2",
 		"4": "battle.bored.3"
 	},
-	"music_intro": "fanfare"
+	"music_intro": "fanfare",
+	"stage": {
+		"zoom": 1.8,
+		"focus_at": 0.62,
+		"background_shade": 0.8,
+		"dim": 0.6,
+		"heroes": {
+			"hero_sword": {
+				"pos": [
+					66,
+					118
+				],
+				"scale": 2.0,
+				"enter_from": [
+					-110,
+					0
+				],
+				"menu": [
+					34,
+					-44
+				]
+			},
+			"hero_mage": {
+				"pos": [
+					160,
+					82
+				],
+				"scale": 1.5,
+				"enter_from": [
+					0,
+					-130
+				],
+				"menu": [
+					26,
+					-30
+				]
+			},
+			"hero_thief": {
+				"pos": [
+					254,
+					96
+				],
+				"scale": 1.5,
+				"enter_from": [
+					110,
+					0
+				],
+				"menu": [
+					-6,
+					-58
+				]
+			}
+		},
+		"slime_pos": [
+			150,
+			160
+		],
+		"ally_offset": [
+			16,
+			0
+		],
+		"peek_offset": [
+			0,
+			24
+		],
+		"bored_shift": [
+			0,
+			4
+		]
+	},
+	"bored_turn": {
+		"2": "hero_thief",
+		"3": "hero_mage",
+		"4": "hero_sword"
+	}
 }

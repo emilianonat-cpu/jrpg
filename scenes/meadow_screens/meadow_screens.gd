@@ -30,6 +30,7 @@ var _mouse_pos := Vector2(-100, -100)
 
 var _clock_session := -1
 var _hint_t := 0.0
+var _music_hold := false                # the spotted moment drives the music itself
 var _focus_label: Label = null          # the prompt, next to the thing it is about
 
 @onready var world: Node2D = $World
@@ -47,6 +48,7 @@ func enter(_payload: Dictionary) -> void:
 		"hero_pass": _ev_hero_pass,
 		"bell_evening": _ev_bell_evening,
 		"day_end": _ev_day_end,
+		"spotted": _ev_spotted,
 	}
 	interact_handlers = {
 		"pickup": _use_pickup, "source": _use_source, "sink": _use_sink,
@@ -77,6 +79,7 @@ func enter(_payload: Dictionary) -> void:
 
 
 func _exit_tree() -> void:
+	Music.set_level("off")
 	if Clock.ticked.is_connected(_on_tick):
 		Clock.ticked.disconnect(_on_tick)
 	Clock.stop(_clock_session)
@@ -288,17 +291,21 @@ func _prompt_for(o: WorldObject) -> String:
 		var args := {"item": _item_name(str(t.def.get("item", ""))), "held": _item_name(day.carried),
 			"p": t.get("progress", 0), "a": t.get("amount", 0),
 			"title": Content.text(str(t.def.get("title", "")))}
+		var item_id := str(t.def.get("item", ""))
 		if o.kind == "sink":
 			if day.is_done(task_id):
 				return Content.text("prompt.sink_done", args)
-			if day.carried == str(t.def.get("item", "")):
-				return Content.text("prompt.sink_ready", args)
+			if day.carried == item_id:
+				# The verb fits the thing: a shard is fitted back, a seed is planted.
+				var put_key := "prompt.put." + item_id
+				return Content.text(put_key if Content.has_text(put_key) else "prompt.sink_ready", args)
 			if day.carried != "":
 				return Content.text("prompt.sink_wrong", args)
 			return Content.text("prompt.sink_needs", args)
 		if day.carried != "":
 			return Content.text("prompt.hands_full", args)
-		return Content.text("prompt.absorb_item", args)
+		var take_key := "prompt.take." + item_id
+		return Content.text(take_key if Content.has_text(take_key) else "prompt.absorb_item", args)
 	return o.prompt()
 
 
@@ -489,6 +496,7 @@ func act(o: WorldObject) -> void:
 		await handler.call(o)
 	if is_instance_valid(self) and not busy:
 		_update_focus()
+		_flush_pending()
 
 
 func _use_pickup(o: WorldObject) -> void:
@@ -586,9 +594,17 @@ func go_home() -> void:
 func _use_board(_o: WorldObject) -> void:
 	var v := day.variation
 	var n := planned_incidents()
-	await say([{"speaker": "board", "text": str(v.get("board_title", "board.title.1"))},
-		{"speaker": "board", "text": str(v.get("board_notice", "board.notice.default")), "args": {"n": n}},
-		{"speaker": "board", "text": "board.footer"}])
+	var lines := [{"speaker": "board", "text": str(v.get("board_title", "board.title.1"))},
+		{"speaker": "board", "text": str(v.get("board_notice", "board.notice.default")), "args": {"n": n}}]
+	# Today's work orders: what the visitors left behind, and why it matters (to them).
+	var next := next_hero_pass()
+	var when := Clock.format(next) if next >= 0.0 else Content.text("board.later")
+	for task_id in day.tasks.keys():
+		var key: String = "order." + str(task_id)
+		if Content.has_text(key) and not day.is_done(task_id):
+			lines.append({"speaker": "board", "text": key, "args": {"time": when}})
+	lines.append({"speaker": "board", "text": "board.footer"})
+	await say(lines)
 
 
 func _use_npc(o: WorldObject) -> void:
@@ -893,6 +909,11 @@ func _process(delta: float) -> void:
 	if not busy and day.flags.get("_rebuild", false):
 		day.flags.erase("_rebuild")
 		_rebuild()
+	_update_music()
+	if Rules.text("screens.spot_rule", "screen") == "screen":
+		_check_spotted()
+		return
+	# Old rule: the party has to walk past Slayme.
 	if player == null or busy or walker == null or walker.ignore_player or cover_id != "":
 		return
 	var r := Rules.num("screens.spot_radius", 22)
@@ -900,6 +921,113 @@ func _process(delta: float) -> void:
 		if absf(pos.x - player.position.x) <= r:
 			_start_battle()
 			return
+
+
+## The rule: while the Heroes are on Slayme's screen, if he is not hidden they see him.
+## Seen once per pass (the pass dictionary survives screen rebuilds); if Slayme is busy
+## (sliding, talking) the encounter waits in the queue instead of being lost.
+func _check_spotted() -> void:
+	if player == null or walker == null or walker.ignore_player or cover_id != "" or _in_battle_flow:
+		return
+	var p: Dictionary = walker.get_meta("pass", {})
+	if p.get("spotted", false) or p.get("ignore", false):
+		return
+	var lead: Vector2 = walker.positions().reduce(func(a, b): return a if a.x > b.x else b, Vector2(-999, 0))
+	if lead.x < Rules.num("screens.spot_enter_x", 28):
+		return   # not in yet
+	p["spotted"] = true
+	walker.paused = true
+	if busy:
+		_pending.append("spotted")
+	else:
+		_ev_spotted()
+
+
+## A short moment: they stop, one of them notices, says something, the music opens up.
+func _ev_spotted() -> void:
+	if walker == null or _in_battle_flow or not is_inside_tree():
+		return
+	busy = true
+	_show_focus()
+	walker.paused = true
+	Clock.pause("spotted")
+	_music_hold = true
+	Music.set_level("off", 0.05)
+	var ids: Array = walker.members
+	var n := int(GameState.stats.get("battles", 0))
+	var who: String = ids[n % ids.size()] if not ids.is_empty() else ""
+	var s: ArtSprite = walker.sprite_of(who) if who != "" else null
+	var head := (s.global_position if s != null else player.position) + Vector2(0, -Rules.num("screens.spot_mark_height", 26))
+	var mark := _world_label(Content.text("fx.spotted_mark"), head, Rules.text("ui.done_color", "#ffe28a"))
+	for o in walker.sprites:   # everyone turns toward Slayme
+		o.flip_h = player.position.x < o.global_position.x
+	await get_tree().create_timer(Rules.num("screens.spot_pause_seconds", 0.5)).timeout
+	Art.play_sound("spotted")
+	Music.set_level("full", 0.05)
+	var line := _spot_line(who)
+	if line != "" and is_instance_valid(mark):
+		mark.text = line
+		mark.reset_size()
+		mark.position = Vector2(clampf(head.x - mark.size.x / 2.0, 2, 318 - mark.size.x), head.y - mark.size.y)
+	await _wait_or_skip(Rules.num("screens.spot_line_seconds", 1.6))
+	if is_instance_valid(mark):
+		mark.queue_free()
+	_music_hold = false
+	Clock.resume("spotted")
+	busy = false
+	if walker != null and not _in_battle_flow:
+		_start_battle()
+
+
+func _spot_line(hero_id: String) -> String:
+	var lines: Array = Content.dict("heroes").get("heroes", {}).get(hero_id, {}).get("spot_lines", [])
+	if lines.is_empty():
+		return ""
+	var n := int(GameState.stats.get("battles", 0))
+	return Content.text(str(lines[n % lines.size()]))
+
+
+## Waits, or less if the player presses interact / clicks.
+func _wait_or_skip(seconds: float) -> void:
+	var t := 0.0
+	while t < seconds:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		if t > 0.2 and (Input.is_action_just_pressed("interact") or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			return
+
+
+## Words placed in the world, outlined, centered on [param at].
+func _world_label(text: String, at: Vector2, color: String = "") -> Label:
+	var l := Label.new()
+	l.text = text
+	l.z_index = 60
+	l.add_theme_constant_override("outline_size", Rules.integer("ui.world_text_outline", 4))
+	l.add_theme_color_override("font_outline_color", Color(Rules.text("ui.world_text_outline_color", "#1c1814")))
+	if color != "":
+		l.add_theme_color_override("font_color", Color(color))
+	UiTheme.font(l, "font_main", "ui.font_size_world")
+	world.add_child(l)
+	l.reset_size()
+	l.position = Vector2(clampf(at.x - l.size.x / 2.0, 2, 318 - l.size.x), at.y - l.size.y)
+	return l
+
+
+## The Heroes' theme, heard through distance: nothing, far, near, on this screen.
+func _update_music() -> void:
+	if _in_battle_flow or _music_hold:
+		return
+	var lvl := "off"
+	if walker != null:
+		var p: Dictionary = walker.get_meta("pass", {})
+		lvl = "full" if p.get("spotted", false) and not p.get("ignore", false) else "screen"
+	elif not passes.is_empty():
+		lvl = "near"
+	else:
+		var next := next_hero_pass()
+		if next >= 0.0 and next - Clock.minutes <= Rules.num("screens.hero_warning_minutes", 20):
+			lvl = "far"
+	Music.set_level(lvl)
 
 
 # ---- battle ----------------------------------------------------------------------------
@@ -910,10 +1038,13 @@ func _start_battle() -> void:
 	_show_focus()
 	hud.visible = false
 	Clock.pause("battle")
-	walker.paused = true
+	Music.set_level("full", 0.1)
+	if walker != null:
+		walker.paused = true
 	var b = BATTLE_SCENE.instantiate()
 	battle_layer.add_child(b)
-	b.start(day.variation.get("party", []), location.get("terrain", []), day.carried)
+	b.start(day.variation.get("party", []), location.get("terrain", []), day.carried,
+		str(location.get("background", "")), float(location.get("hero_lane_y", 108)))
 	var res: Dictionary = await b.battle_finished
 	b.queue_free()
 	await _after_battle(res)

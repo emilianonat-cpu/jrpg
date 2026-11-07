@@ -14,7 +14,7 @@
 		"text_color": "#f4f0e6",
 		"line_spacing": 0,
 		"battle_log_delay": 1.6,
-		"hero_cursor_step": 0.3,
+		"hero_cursor_step": 0.18,
 		"slime_panel_text_color": "#2a2420",
 		"show_task_list": false,
 		"toast_seconds": 2.5,
@@ -141,7 +141,12 @@
 				"defense_bonus": 1
 			}
 		},
-		"_comment": "PLACEHOLDER balance. Every hero acts each round: Slayme survives round 1 only by bracing, hiding or calling for help, then runs away during a flee window (prepare_brave, thunder)."
+		"_comment": "PLACEHOLDER balance. Every hero acts each round: Slayme survives round 1 only by bracing, hiding or calling for help, then runs away during a flee window (prepare_brave, thunder).",
+		"stage": {
+			"enter_seconds": 0.5,
+			"leave_seconds": 0.6,
+			"peek_seconds": 1.4
+		}
 	},
 	"trust": {
 		"_comment": "Step 1 from the start; step 2 and 3 at these totals. Step 3 = the first question = end of the prototype.",
@@ -175,6 +180,38 @@
 		"focus_padding": 4,
 		"hero_cross_seconds_min": 16,
 		"hero_bark_seconds": 6,
-		"carry_speed_factor": 0.8
+		"carry_speed_factor": 0.8,
+		"spot_rule": "screen",
+		"spot_enter_x": 28,
+		"spot_mark_height": 26,
+		"spot_pause_seconds": 0.5,
+		"spot_line_seconds": 1.8
+	},
+	"music": {
+		"_comment": "The Heroes' theme heard through distance. levels: [volume_db, lowpass_hz]. far = a pass is coming soon, near = they are on another screen, screen = on yours, full = they saw Slayme / battle.",
+		"heroes_track": "hero_theme",
+		"ramp_seconds": 1.5,
+		"levels": {
+			"off": [
+				-80,
+				400
+			],
+			"far": [
+				-28,
+				500
+			],
+			"near": [
+				-18,
+				1200
+			],
+			"screen": [
+				-12,
+				2500
+			],
+			"full": [
+				-4,
+				20000
+			]
+		}
 	}
 }

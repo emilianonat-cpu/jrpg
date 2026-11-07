@@ -463,6 +463,41 @@ snd("battle_incident", seq([marimba(N["E4"], 0.4), marimba(N["C4"], 0.4), marimb
 snd("battle_fled", seq([pluck(N["C5"], 0.15), pluck(N["E5"], 0.15), pluck(N["G5"], 0.3)], 0.07))
 snd("battle_bored", seq([square(N["G4"], 0.15, 0.15), square(N["E4"], 0.15, 0.15), square(N["C4"], 0.4, 0.15, decay=2)], 0.16))
 
+# The Heroes' theme: a confident little march (chip square lead, triangle bass, drums).
+# One loop; the game muffles it with distance (rules.json "music"), never Slayme's own sound.
+def hero_theme():
+    bpm = 132
+    beat = 60.0 / bpm
+    total = int(rate * beat * 32)   # 8 bars of 4/4
+    out = [0.0] * total
+    def put(samples, at_beat):
+        start = int(at_beat * beat * rate)
+        for i, v in enumerate(samples):
+            if start + i < total:
+                out[start + i] += v
+    lead = [("C5", 1), ("E5", 0.5), ("G5", 0.5), ("C6", 1.5), ("G5", 0.5), ("A5", 1), ("G5", 0.5), ("E5", 0.5), ("D5", 2),
+            ("D5", 1), ("F5", 0.5), ("A5", 0.5), ("G5", 1.5), ("E5", 0.5), ("F5", 1), ("E5", 0.5), ("D5", 0.5), ("C5", 2),
+            ("C5", 1), ("E5", 0.5), ("G5", 0.5), ("C6", 1.5), ("G5", 0.5), ("A5", 1), ("C6", 0.5), ("A5", 0.5), ("G5", 2),
+            ("F5", 1), ("E5", 0.5), ("D5", 0.5), ("E5", 1), ("G5", 1), ("C5", 3), (None, 1)]
+    t = 0.0
+    for note, d in lead:
+        if note:
+            put(square(N[note], d * beat * 0.9, 0.16, 0.25, 2.5), t)
+        t += d
+    bass = ["C3", "C3", "G3", "G3", "G3", "G3", "C3", "C3", "C3", "C3", "F4", "F4", "G3", "G3", "C3", "C3"]
+    for i, b in enumerate(bass):
+        f = N[b] / 2 if b == "F4" else N[b]
+        put(tri(f, beat * 1.8, 0.35, 2.0), i * 2)
+    for k in range(32):
+        put(drum(100, 0.15, 0.45, 0.4) if k % 2 == 0 else noise(0.07, 0.18, 45, 0.3), k)
+    return out
+
+
+snd("hero_theme", hero_theme())
+manifest["sounds"]["hero_theme"]["loop"] = True
+# "You've been seen": a short sting, the theme's first notes, loud.
+snd("spotted", seq([square(N["G5"], 0.1, 0.3), square(N["C6"], 0.35, 0.3, decay=3)], 0.09))
+
 # icon
 icon = blob(64, 52, MUTED["slime"], eyes=False)
 canvas = Image.new("RGBA", (64, 64), (0, 0, 0, 0)); canvas.paste(icon, (0, 10))

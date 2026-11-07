@@ -1,7 +1,7 @@
 {
-	"_comment": "What hero actions do. menu = which entry of the visible hero menu the cursor goes to (battle.json hero_menu). effect: damage | steal | out_of_mp | none. flags: flee_window = Slayme can run away this round.",
-	"pose":          {"menu": "",       "label": "action.pose",          "log": "battle.log.pose",          "effect": "none", "sfx": "pose" },
-	"focus":         {"menu": "",       "label": "action.focus",         "log": "battle.log.focus",         "effect": "none", "sfx": "focus" },
+	"_comment": "What hero actions do. menu = which entry of the visible hero menu the cursor goes to (battle.json hero_menu). effect: damage | steal | out_of_mp | none. flags: flee_window = Slayme can run away this round. peek = a panel of their own stuff that opens for a moment (text key; key.hidden is shown until Slayme looks around).",
+	"pose":          {"menu": "",       "label": "action.pose",          "log": "battle.log.pose",          "effect": "none", "sfx": "pose", "peek": "peek.equip" },
+	"focus":         {"menu": "",       "label": "action.focus",         "log": "battle.log.focus",         "effect": "none", "sfx": "focus", "peek": "peek.mp" },
 	"attack":        {"menu": "attack", "label": "action.attack",        "log": "battle.log.attack",        "effect": "damage", "sfx": "hit" },
 	"poke":          {"menu": "attack", "label": "action.poke",          "log": "battle.log.poke",          "effect": "damage", "sfx": "poke" },
 	"prepare_brave": {"menu": "attack", "label": "action.prepare_brave", "log": "battle.log.prepare_brave", "effect": "none", "flags": ["flee_window"], "sfx": "charge" },
@@ -9,6 +9,6 @@
 	"fire":          {"menu": "magic",  "label": "action.fire",          "log": "battle.log.fire",          "effect": "damage", "sfx": "fire" },
 	"thunder":       {"menu": "magic",  "label": "action.thunder",       "log": "battle.log.thunder",       "effect": "damage", "flags": ["flee_window"], "sfx": "thunder" },
 	"out_of_mp":     {"menu": "magic",  "label": "action.out_of_mp",     "log": "battle.log.out_of_mp",     "effect": "out_of_mp", "sfx": "fizzle" },
-	"pickpocket":    {"menu": "item",   "label": "action.pickpocket",    "log": "battle.log.pickpocket",    "effect": "steal", "sfx": "steal" },
+	"pickpocket":    {"menu": "item",   "label": "action.pickpocket",    "log": "battle.log.pickpocket",    "effect": "steal", "sfx": "steal", "peek": "peek.inventory" },
 	"sleeping":      { "menu": "",       "label": "action.sleeping",      "log": "",                         "effect": "none" }
 }

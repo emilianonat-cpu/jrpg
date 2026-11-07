@@ -19,30 +19,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-stretch_mode = 6
+expand_mode = 1
 
-[node name="HeroRow" type="HBoxContainer" parent="."]
+[node name="Stage" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = -4.0
-offset_bottom = 102.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-alignment = 1
-theme_override_constants/separation = 6
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="LogPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 4.0
-offset_top = 104.0
-offset_right = -4.0
-offset_bottom = 124.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 24.0
 grow_horizontal = 2
 
 [node name="Log" type="Label" parent="LogPanel"]
@@ -53,37 +50,19 @@ autowrap_mode = 3
 [node name="SlimePanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = -54.0
-offset_right = -4.0
-offset_bottom = -2.0
-grow_horizontal = 2
+offset_left = -112.0
+offset_top = -42.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 0
 grow_vertical = 0
 
 [node name="Row" type="HBoxContainer" parent="SlimePanel"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="SlimeBox" type="VBoxContainer" parent="SlimePanel/Row"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(56, 0)
-layout_mode = 2
-
-[node name="SlimeSlot" type="Control" parent="SlimePanel/Row/SlimeBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(56, 14)
-layout_mode = 2
-
-[node name="Hp" type="Label" parent="SlimePanel/Row/SlimeBox"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Status" type="Label" parent="SlimePanel/Row/SlimeBox"]
-unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Verbs" type="GridContainer" parent="SlimePanel/Row"]
