@@ -74,14 +74,22 @@ func dict(table_name: String) -> Dictionary:
 	return _dict(table(table_name))
 
 
-## A dialogue sequence: Array of line dictionaries (see data/dialogue/README in README.md).
-func dialogue(file: String, sequence: String) -> Array:
+## A dialogue sequence: Array of line dictionaries.
+## If the entry is a list of sequences (variants), [param variant] picks one
+## (wrapping around), so repeated talks can say different things.
+func dialogue(file: String, sequence: String, variant: int = 0) -> Array:
 	var seqs := dict("dialogue/" + file)
 	var lines: Variant = seqs.get(sequence, [])
 	if not lines is Array or lines.is_empty():
 		push_warning("Missing dialogue %s/%s" % [file, sequence])
 		return [{"speaker": "", "text": "dlg.missing"}]
+	if lines[0] is Array:
+		return lines[posmod(variant, lines.size())]
 	return lines
+
+
+func has_dialogue(file: String, sequence: String) -> bool:
+	return dict("dialogue/" + file).has(sequence)
 
 
 func _substitute(s: String, args: Dictionary) -> String:

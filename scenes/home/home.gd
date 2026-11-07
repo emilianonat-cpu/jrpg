@@ -18,5 +18,10 @@ func enter(_payload: Dictionary) -> void:
 
 
 func _evening(dlg: Dictionary) -> void:
-	await dialogue.play(Content.dialogue(str(dlg.get("file", "home")), str(dlg.get("sequence", "evening"))))
+	var bit_line := str(GameState.variation_for(GameState.day).get("bit_line", "dlg.kid.play_1"))
+	var lines: Array = Content.dialogue(str(dlg.get("file", "home")), str(dlg.get("sequence", "evening"))).duplicate(true)
+	for l in lines:
+		if str(l.get("text", "")) == "{bit_line}":
+			l["text"] = bit_line
+	await dialogue.play(lines)
 	go("night")

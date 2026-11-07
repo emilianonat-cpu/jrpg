@@ -1,9 +1,51 @@
 {
-	"_comment": "The colleague by the path. warn = talked to within world.warn_window_minutes before a hero pass.",
-	"idle": [ { "speaker": "colleague", "text": "dlg.colleague.idle" } ],
-	"warn": [
-		{ "speaker": "", "text": "dlg.colleague.warn_narration" },
-		{ "speaker": "colleague", "text": "dlg.colleague.warn_reply" }
+	"_comment": "The colleague on the path. warn = talked to within world.warn_window_minutes before a hero pass: he goes to the Pool instead of having his incident.",
+	"idle": [
+		[
+			{
+				"speaker": "colleague",
+				"text": "dlg.colleague.idle_1"
+			}
+		],
+		[
+			{
+				"speaker": "colleague",
+				"text": "dlg.colleague.idle_2"
+			}
+		],
+		[
+			{
+				"speaker": "colleague",
+				"text": "dlg.colleague.idle_3"
+			}
+		]
 	],
-	"warned_already": [ { "speaker": "colleague", "text": "dlg.colleague.warned_already" } ]
+	"warn": [
+		{
+			"speaker": "",
+			"text": "dlg.colleague.warn_narration"
+		},
+		{
+			"speaker": "colleague",
+			"text": "dlg.colleague.warn_reply"
+		}
+	],
+	"warned_already": [
+		{
+			"speaker": "colleague",
+			"text": "dlg.colleague.warned_already"
+		}
+	],
+	"at_pool": [
+		{
+			"speaker": "colleague",
+			"text": "dlg.colleague.at_pool"
+		}
+	],
+	"after_incident": [
+		{
+			"speaker": "colleague",
+			"text": "dlg.colleague.after_incident"
+		}
+	]
 }

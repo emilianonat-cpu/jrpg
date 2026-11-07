@@ -27,6 +27,8 @@ func set_items(new_items: Array, start_index: int = 0) -> void:
 	_labels.clear()
 	for it in items:
 		var l := Label.new()
+		l.mouse_filter = Control.MOUSE_FILTER_STOP
+		l.gui_input.connect(_on_label_input.bind(_labels.size()))
 		if text_color.a > 0.0:
 			l.add_theme_color_override("font_color", text_color)
 		add_child(l)
@@ -50,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
 		if bool(items[index].get("enabled", true)):
+			Art.play_sound("ui_confirm")
 			chosen.emit(str(items[index].get("id", str(index))), index)
 		return
 	elif event.is_action_pressed("cancel") and allow_cancel:
@@ -66,6 +69,7 @@ func _move(step: int) -> void:
 	index = (index + step + n) % n
 	_refresh()
 	moved.emit(index)
+	Art.play_sound("ui_move")
 
 
 func _refresh() -> void:
@@ -76,3 +80,20 @@ func _refresh() -> void:
 		var on := active and i == index
 		_labels[i].text = (cursor if on else blank) + str(it.get("label", ""))
 		_labels[i].modulate.a = 1.0 if bool(it.get("enabled", true)) else 0.45
+
+
+func _on_label_input(event: InputEvent, i: int) -> void:
+	if not active or i >= items.size() or not Controls.mouse_enabled():
+		return
+	if event is InputEventMouseMotion and index != i:
+		index = i
+		_refresh()
+		moved.emit(index)
+		Art.play_sound("ui_move")
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		index = i
+		_refresh()
+		accept_event()
+		if bool(items[i].get("enabled", true)):
+			Art.play_sound("ui_confirm")
+			chosen.emit(str(items[i].get("id", str(i))), i)

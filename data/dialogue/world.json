@@ -27,5 +27,11 @@
 			"speaker": "",
 			"text": "world.day_end"
 		}
+	],
+	"heroes_coming": [
+		{
+			"speaker": "",
+			"text": "world.heroes_coming"
+		}
 	]
 }

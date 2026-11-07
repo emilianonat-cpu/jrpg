@@ -25,6 +25,7 @@ var outcome := ""
 var plans: Dictionary = {}      # hero id -> action id for this round
 var ally_incidents := 0
 var calls_left := 0
+var looked := false
 var verb_handlers: Dictionary = {}
 
 var _hero_defs: Dictionary = {}
@@ -141,6 +142,8 @@ func _hero(id: String) -> Dictionary:
 func verbs() -> Array:
 	var out := []
 	for v in _battle.get("verbs", []):
+		if not is_unlocked(str(v.id)):
+			continue   # not yet: Slayme doesn't know this one
 		var enabled := true
 		match str(v.get("needs", "")):
 			"absorbable":
@@ -150,6 +153,25 @@ func verbs() -> Array:
 			"ally_call":
 				enabled = ally.is_empty() and calls_left > 0
 		out.append({"id": str(v.id), "label": Content.text(str(v.label)), "enabled": enabled})
+	return out
+
+
+## Verbs come one at a time: each needs Novecento's trust (rules battle.unlock.<verb>).
+func is_unlocked(verb_id: String) -> bool:
+	var need := Rules.integer("battle.unlock.%s" % verb_id, 0)
+	return bool(Hooks.filter("battle.verb_unlocked", GameState.trust >= need, {"verb": verb_id, "model": self}))
+
+
+## Verbs unlocked since the last battle; remembers them (GameState.flags, kept overnight).
+func take_new_verbs() -> Array:
+	var known: Array = GameState.flags.get("verbs_known", [])
+	var out := []
+	for v in _battle.get("verbs", []):
+		var id := str(v.id)
+		if is_unlocked(id) and not known.has(id):
+			out.append(Content.text(str(v.label)))
+			known.append(id)
+	GameState.flags["verbs_known"] = known
 	return out
 
 
@@ -202,7 +224,7 @@ func resolve(verb: String, arg: String = "") -> Array:
 
 func result() -> Dictionary:
 	return {"outcome": outcome, "item": str(slime.get("item", "")), "rounds": round_no,
-		"ally_incidents": ally_incidents, "boredom": boredom}
+		"ally_incidents": ally_incidents, "boredom": boredom, "looked": looked}
 
 
 func _perform(h: Dictionary, action: String, ev: Array) -> bool:
@@ -309,6 +331,7 @@ func _log(ev: Array, key: String, args: Dictionary) -> void:
 # ---- verbs -------------------------------------------------------------------
 
 func _verb_look(_arg: String, ev: Array) -> void:
+	looked = true
 	_log(ev, "battle.log.look", {})
 	var preview := {}
 	var n := Rules.integer("battle.look.turns", 2)
@@ -354,6 +377,8 @@ func _verb_hide(arg: String, ev: Array) -> void:
 	slime.hidden = true
 	_hid_this_round = true
 	_log(ev, "battle.log.hide", {"thing": terrain_label(arg)})
+	if Rules.flag("battle.terrain.consumed_on_hide", true):
+		terrain.erase(arg)   # a cover works once per battle
 
 
 func _verb_call_help(_arg: String, ev: Array) -> void:

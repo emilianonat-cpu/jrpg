@@ -46,18 +46,30 @@
 		},
 		"hero_sword": {
 			"file": "hero_sword.png",
-			"frames": 2,
-			"fps": 6
+			"frames": 4,
+			"fps": 8,
+			"offset": [
+				0,
+				-12
+			]
 		},
 		"hero_mage": {
 			"file": "hero_mage.png",
-			"frames": 2,
-			"fps": 6
+			"frames": 4,
+			"fps": 8,
+			"offset": [
+				0,
+				-12
+			]
 		},
 		"hero_thief": {
 			"file": "hero_thief.png",
-			"frames": 2,
-			"fps": 6
+			"frames": 4,
+			"fps": 8,
+			"offset": [
+				0,
+				-12
+			]
 		},
 		"hero_sword_battle": {
 			"file": "hero_sword_battle.png",
@@ -157,6 +169,130 @@
 		},
 		"missing": {
 			"file": "missing.png"
+		},
+		"pool_big": {
+			"file": "pool_big.png"
+		},
+		"shard_ground": {
+			"file": "shard_ground.png"
+		},
+		"coin_ground": {
+			"file": "coin_ground.png"
+		},
+		"seed_sack": {
+			"file": "seed_sack.png"
+		},
+		"pot_stage_0": {
+			"file": "pot_stage_0.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"pot_stage_1": {
+			"file": "pot_stage_1.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"pot_stage_2": {
+			"file": "pot_stage_2.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"pot_stage_3": {
+			"file": "pot_stage_3.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"glued_stage_0": {
+			"file": "glued_stage_0.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"glued_stage_1": {
+			"file": "glued_stage_1.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"glued_stage_2": {
+			"file": "glued_stage_2.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"glued_stage_3": {
+			"file": "glued_stage_3.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"glued_stage_4": {
+			"file": "glued_stage_4.png",
+			"offset": [
+				0,
+				-8
+			]
+		},
+		"chest_stage_0": {
+			"file": "chest_stage_0.png",
+			"offset": [
+				0,
+				-4
+			]
+		},
+		"chest_stage_1": {
+			"file": "chest_stage_1.png",
+			"offset": [
+				0,
+				-4
+			]
+		},
+		"chest_stage_2": {
+			"file": "chest_stage_2.png",
+			"offset": [
+				0,
+				-4
+			]
+		},
+		"chest_stage_3": {
+			"file": "chest_stage_3.png",
+			"offset": [
+				0,
+				-4
+			]
+		},
+		"patch_trampled": {
+			"file": "patch_trampled.png"
+		},
+		"patch_sprout": {
+			"file": "patch_sprout.png"
+		},
+		"exit_left": {
+			"file": "exit_left.png"
+		},
+		"exit_right": {
+			"file": "exit_right.png"
+		},
+		"exit_up": {
+			"file": "exit_up.png"
+		},
+		"exit_down": {
+			"file": "exit_down.png"
+		},
+		"cursor_focus": {
+			"file": "cursor_focus.png"
 		}
 	},
 	"backgrounds": {
@@ -178,6 +314,22 @@
 		},
 		"bg_night": {
 			"file": "bg_night.png",
+			"centered": false
+		},
+		"bg_loc_pool": {
+			"file": "bg_loc_pool.png",
+			"centered": false
+		},
+		"bg_loc_path": {
+			"file": "bg_loc_path.png",
+			"centered": false
+		},
+		"bg_loc_tree": {
+			"file": "bg_loc_tree.png",
+			"centered": false
+		},
+		"bg_loc_field": {
+			"file": "bg_loc_field.png",
 			"centered": false
 		}
 	},
@@ -201,6 +353,11 @@
 			"file": "panel_hud.png",
 			"margin": 3,
 			"padding": 4
+		},
+		"panel_board": {
+			"file": "panel_board.png",
+			"margin": 3,
+			"padding": 4
 		}
 	},
 	"fonts": {},
@@ -208,11 +365,126 @@
 		"bell": {
 			"file": "bell.wav"
 		},
+		"bell_open": {
+			"file": "bell_open.wav"
+		},
+		"bell_heroes": {
+			"file": "bell_heroes.wav"
+		},
+		"bell_incident": {
+			"file": "bell_incident.wav"
+		},
+		"bell_close": {
+			"file": "bell_close.wav"
+		},
 		"fanfare": {
 			"file": "fanfare.wav"
 		},
 		"hit": {
 			"file": "hit.wav"
+		},
+		"absorb": {
+			"file": "absorb.wav"
+		},
+		"deliver": {
+			"file": "deliver.wav"
+		},
+		"done": {
+			"file": "done.wav"
+		},
+		"nope": {
+			"file": "nope.wav"
+		},
+		"spit": {
+			"file": "spit.wav"
+		},
+		"footsteps": {
+			"file": "footsteps.wav"
+		},
+		"ui_move": {
+			"file": "ui_move.wav"
+		},
+		"ui_confirm": {
+			"file": "ui_confirm.wav"
+		},
+		"ui_blip": {
+			"file": "ui_blip.wav"
+		},
+		"blip_mentor": {
+			"file": "blip_mentor.wav"
+		},
+		"blip_colleague": {
+			"file": "blip_colleague.wav"
+		},
+		"blip_partner": {
+			"file": "blip_partner.wav"
+		},
+		"blip_kid": {
+			"file": "blip_kid.wav"
+		},
+		"pose": {
+			"file": "pose.wav"
+		},
+		"focus": {
+			"file": "focus.wav"
+		},
+		"poke": {
+			"file": "poke.wav"
+		},
+		"charge": {
+			"file": "charge.wav"
+		},
+		"slash": {
+			"file": "slash.wav"
+		},
+		"fire": {
+			"file": "fire.wav"
+		},
+		"thunder": {
+			"file": "thunder.wav"
+		},
+		"fizzle": {
+			"file": "fizzle.wav"
+		},
+		"steal": {
+			"file": "steal.wav"
+		},
+		"unlock": {
+			"file": "unlock.wav"
+		},
+		"v_look": {
+			"file": "v_look.wav"
+		},
+		"v_brace": {
+			"file": "v_brace.wav"
+		},
+		"v_absorb": {
+			"file": "v_absorb.wav"
+		},
+		"v_hide": {
+			"file": "v_hide.wav"
+		},
+		"v_help": {
+			"file": "v_help.wav"
+		},
+		"v_flee": {
+			"file": "v_flee.wav"
+		},
+		"battle_incident": {
+			"file": "battle_incident.wav"
+		},
+		"battle_fled": {
+			"file": "battle_fled.wav"
+		},
+		"battle_bored": {
+			"file": "battle_bored.wav"
+		},
+		"hero_theme": {
+			"file": "hero_theme.wav",
+			"loop": true
+		},
+		"spotted": {
+			"file": "spotted.wav"
 		}
 	}
 }

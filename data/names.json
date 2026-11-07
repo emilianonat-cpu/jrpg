@@ -20,5 +20,7 @@
 	"item_seed": "some seeds",
 	"item_mud": "mud",
 	"item_spores": "spores",
-	"slime_generic": "Slime"
+	"slime_generic": "Slime",
+	"place_old_tree": "The Old Tree",
+	"place_field": "The Field"
 }

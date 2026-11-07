@@ -63,17 +63,23 @@ Eventi: `game.new`, `day.started`, `day.ended`, `task.completed`, `trust.changed
 
 In più `user://rules_override.json` (stessa forma di `rules.json`) cambia le regole senza toccare il progetto.
 
+## Due modi di vedere il Prato
+
+`world.mode` in `rules.json`:
+- **`screens`** (predefinito, il prototipo da provare): schermate fisse definite in `data/locations.json` (la Pozza, il Sentiero, il Vecchio albero, il Campo). Si indica un oggetto e Slayme ci scivola sopra. Spostarsi da una schermata all'altra costa tempo. Gli Eroi attraversano alcune schermate agli orari del `route` in `heroes.json`. Gli infortuni del giorno sono pianificati in `days.json` (`incidents`): il numero sulla bacheca è il loro conteggio, e se Slayme ha un infortunio "prende il posto" di uno di quelli.
+- **`free`**: il Prato top-down esplorabile dello scheletro (`data/maps/meadow.json`), lasciato com'era.
+
 ## Comandi
 
-Tastiera o gamepad, il mouse non fa niente (regola `input.mouse_enabled`).
+Mouse oppure tastiera/gamepad.
 
-- Muoversi: frecce / WASD / croce o levetta
-- Interagire, avanzare, scegliere: Z / Invio / Spazio / A
-- Annullare, sputare ciò che si ha dentro: X / Esc / B
+- **Mouse:** passa sopra un oggetto per vederlo, clic sinistro per usarlo, clic destro per sputare ciò che si ha dentro. Clic per far avanzare i dialoghi e scegliere i verbi in battaglia.
+- **Tastiera:** frecce o WASD per scegliere l'oggetto (o il verbo); Z, Invio o Spazio per usarlo o andare avanti; X o Esc per sputare.
+- Gamepad: croce per scegliere, A per usare, B per sputare.
 
 ## Esportare per Windows
 
-Il preset "Windows Desktop" è in `export_presets.cfg` e include i file `data/*.json` e i manifest dei pacchetti, che Godot da solo non esporterebbe. Servono i template di esportazione di Godot 4.7.2 (Editor → Gestisci template di esportazione), poi Progetto → Esporta. L'eseguibile finisce in `build/windows/`.
+Il preset "Windows Desktop" (eseguibile unico, pck incorporato) è in `export_presets.cfg` e include i file `data/*.json` e i manifest dei pacchetti, che Godot da solo non esporterebbe. Servono i template di esportazione di Godot 4.7.2 (Editor → Gestisci template di esportazione), poi Progetto → Esporta. L'eseguibile finisce in `build/windows/`.
 
 ## Test
 

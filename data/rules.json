@@ -4,23 +4,33 @@
 		"language": "en"
 	},
 	"art": {
-		"pack": "placeholder"
+		"pack": "collage"
 	},
 	"input": {
-		"mouse_enabled": false
+		"mouse_enabled": true
 	},
 	"ui": {
-		"font_size": 6,
+		"font_size": 9,
 		"text_color": "#f4f0e6",
 		"line_spacing": 0,
-		"battle_log_delay": 0.9,
-		"hero_cursor_step": 0.12,
-		"slime_panel_text_color": "#2a2420"
+		"battle_log_delay": 1.6,
+		"hero_cursor_step": 0.18,
+		"slime_panel_text_color": "#2a2420",
+		"show_task_list": false,
+		"toast_seconds": 2.5,
+		"font_size_heroes": 10,
+		"font_size_slime": 10,
+		"font_size_world": 8,
+		"prompt_near_object": true,
+		"world_text_outline": 4,
+		"world_text_outline_color": "#1c1814",
+		"done_color": "#ffe28a",
+		"done_line_seconds": 6.0
 	},
 	"clock": {
 		"_comment": "6:00-18:00 in about 6-8 real minutes",
 		"day_start": "06:00",
-		"minutes_per_second": 1.8,
+		"minutes_per_second": 2.5,
 		"pause_in_dialogue": true
 	},
 	"world": {
@@ -33,13 +43,40 @@
 		"hero_spacing": 14,
 		"break_radius": 14,
 		"thief_stop_seconds": 3.0,
-		"respawn_hidden_seconds": 2.0
+		"respawn_hidden_seconds": 2.0,
+		"mode": "screens",
+		"_comment": "mode: screens (fixed screens, the prototype) or free (top-down meadow from maps/meadow.json)"
 	},
 	"incident": {
 		"clock_penalty_minutes": 60,
-		"reset_task_progress": true
+		"reset_task_progress": false
+	},
+	"juice": {
+		"_comment": "Tiny physical feedback in the Meadow: Slayme squashes, sinks pop, pickups fly in. hint_*: what you can take bobs, where what you hold goes glows. float_*: '+ shard', '2/3' rising from things.",
+		"squash": [
+			1.35,
+			0.7
+		],
+		"pop": 1.35,
+		"seconds": 0.25,
+		"slurp_seconds": 0.18,
+		"hint_bob_pixels": 1.5,
+		"hint_bob_speed": 3.0,
+		"hint_glow": 0.45,
+		"hint_glow_speed": 5.0,
+		"float_seconds": 0.9,
+		"float_pixels": 14
 	},
 	"battle": {
+		"unlock": {
+			"_comment": "Novecento's trust needed for each of Slayme's verbs. Locked verbs are not shown. 0 = known from the start.",
+			"defend": 0,
+			"look": 2,
+			"flee": 2,
+			"hide": 5,
+			"call_help": 5,
+			"absorb": 6
+		},
 		"minutes_per_round": 3,
 		"min_damage": 0,
 		"slime": {
@@ -99,18 +136,24 @@
 		},
 		"terrain": {
 			"consumed_on_absorb": true,
+			"consumed_on_hide": true,
 			"mud": {
 				"defense_bonus": 1
 			}
 		},
-		"_comment": "PLACEHOLDER balance. Every hero acts each round: Slayme survives round 1 only by bracing, hiding or calling for help, then runs away during a flee window (prepare_brave, thunder)."
+		"_comment": "PLACEHOLDER balance. Every hero acts each round: Slayme survives round 1 only by bracing, hiding or calling for help, then runs away during a flee window (prepare_brave, thunder).",
+		"stage": {
+			"enter_seconds": 0.5,
+			"leave_seconds": 0.6,
+			"peek_seconds": 1.4
+		}
 	},
 	"trust": {
 		"_comment": "Step 1 from the start; step 2 and 3 at these totals. Step 3 = the first question = end of the prototype.",
 		"step_thresholds": [
 			0,
-			5,
-			11
+			4,
+			8
 		],
 		"final_step": 3,
 		"awards": {
@@ -118,7 +161,9 @@
 			"hid_before_heroes": 1,
 			"warned_colleague": 1,
 			"all_tasks_done": 1,
-			"no_incidents": 1
+			"no_incidents": 1,
+			"read_heroes": 1,
+			"ally_hurt": -1
 		}
 	},
 	"night": {
@@ -126,5 +171,54 @@
 	},
 	"debug": {
 		"show_trust": false
+	},
+	"screens": {
+		"slime_speed": 90,
+		"travel_minutes": 15,
+		"spot_radius": 22,
+		"hero_warning_minutes": 20,
+		"focus_padding": 4,
+		"hero_cross_seconds_min": 16,
+		"hero_bark_seconds": 6,
+		"carry_speed_factor": 0.8,
+		"spot_rule": "screen",
+		"spot_enter_x": 28,
+		"spot_mark_height": 26,
+		"spot_pause_seconds": 0.5,
+		"spot_line_seconds": 1.8
+	},
+	"music": {
+		"_comment": "The Heroes' theme heard through distance. levels: [volume_db, lowpass_hz]. far = a pass is coming soon, near = they are on another screen, screen = on yours, full = they saw Slayme / battle.",
+		"heroes_track": "hero_theme",
+		"ramp_seconds": 1.5,
+		"levels": {
+			"off": [
+				-80,
+				400
+			],
+			"far": [
+				-28,
+				500
+			],
+			"near": [
+				-18,
+				1200
+			],
+			"screen": [
+				-12,
+				2500
+			],
+			"full": [
+				-4,
+				20000
+			]
+		}
+	},
+	"bells": {
+		"_comment": "One factory bell, four rhythms: open (shift starts, short), heroes (visitors coming, two rings), incident (sharp, loud, heard everywhere), close (end of shift, long). Ids in the art pack; missing = the plain bell.",
+		"open": "bell_open",
+		"heroes": "bell_heroes",
+		"incident": "bell_incident",
+		"close": "bell_close"
 	}
 }

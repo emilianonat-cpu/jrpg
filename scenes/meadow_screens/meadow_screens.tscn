@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/meadow_screens/meadow_screens.gd" id="1_ms"]
+[ext_resource type="Script" path="res://core/art_sprite.gd" id="2_sprite"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box.tscn" id="4_dlg"]
+
+[node name="Meadow" type="Node"]
+script = ExtResource("1_ms")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="World"]
+z_index = -10
+centered = false
+script = ExtResource("2_sprite")
+
+[node name="Objects" type="Node2D" parent="World"]
+y_sort_enabled = true
+
+[node name="Cursor" type="Sprite2D" parent="World"]
+z_index = 10
+script = ExtResource("2_sprite")
+
+[node name="Hud" parent="." instance=ExtResource("3_hud")]
+
+[node name="Dialogue" parent="." instance=ExtResource("4_dlg")]
+
+[node name="BattleLayer" type="CanvasLayer" parent="."]
+layer = 10

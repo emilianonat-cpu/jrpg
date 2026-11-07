@@ -31,6 +31,7 @@ func play(lines: Array) -> int:
 		speaker_label.visible = spk != ""
 		speaker_label.text = Content.name_of(spk) if spk != "" else ""
 		text_label.text = Content.text(str(line.get("text", "")), line.get("args", {}))
+		Art.play_sound("blip_" + spk if Art.sound("blip_" + spk) != null else "ui_blip")
 		var options: Array = line.get("choices", [])
 		if options.is_empty():
 			choices.visible = false
@@ -64,5 +65,11 @@ func _wait_advance() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _waiting and event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		advance()
+
+
+func _input(event: InputEvent) -> void:
+	if _waiting and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		get_viewport().set_input_as_handled()
 		advance()

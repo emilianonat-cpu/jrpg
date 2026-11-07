@@ -27,5 +27,16 @@ static func apply() -> void:
 	ThemeDB.fallback_font_size = t.default_font_size
 
 
+## Gives [param node] and its children another art-pack font (size from rules).
+static func font(node: Control, art_id: String, size_rule: String) -> void:
+	var f := Art.font(art_id)
+	if f == null:
+		return
+	var t := Theme.new()
+	t.default_font = f
+	t.default_font_size = Rules.integer(size_rule, Rules.integer("ui.font_size", 8))
+	node.theme = t
+
+
 static func panel(node: PanelContainer, art_id: String) -> void:
 	node.add_theme_stylebox_override("panel", Art.stylebox(art_id))

@@ -4,7 +4,8 @@ extends Node
 
 const SCREENS := {
 	"title": "res://scenes/title/title.tscn",
-	"meadow": "res://scenes/meadow/meadow.tscn",
+	"meadow": "res://scenes/meadow_screens/meadow_screens.tscn",
+	"meadow_free": "res://scenes/meadow/meadow.tscn",
 	"home": "res://scenes/home/home.tscn",
 	"night": "res://scenes/night/night.tscn",
 	"end": "res://scenes/end/end.tscn",
@@ -26,6 +27,8 @@ func _ready() -> void:
 
 func show_screen(id: String, payload: Dictionary = {}) -> void:
 	id = Hooks.filter("screen.next", id, {"from": current_id, "payload": payload})
+	if id == "meadow" and Rules.text("world.mode", "screens") == "free":
+		id = "meadow_free"
 	if not SCREENS.has(id):
 		push_error("Unknown screen: %s" % id)
 		return

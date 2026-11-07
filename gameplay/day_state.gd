@@ -18,6 +18,9 @@ var carried_from := ""          # task id the item belongs to
 var incidents := 0
 var awarded: Dictionary = {}    # trust reasons already awarded today
 var flags: Dictionary = {}      # free per-day flags for future mechanics
+var taken: Dictionary = {}      # pickup object id -> true (screens mode)
+var filled: Dictionary = {}     # one-item sink object id -> true (screens mode)
+var carried_pickup := ""        # the pickup object Slayme is carrying
 
 
 func setup(day_no: int, task_defs: Array, day_variation: Dictionary) -> void:
@@ -98,12 +101,52 @@ func release(task_id: String) -> Dictionary:
 func set_carried(item_id: String, from_task: String = "") -> void:
 	carried = item_id
 	carried_from = from_task
+	carried_pickup = ""
 	carried_changed.emit(item_id)
+
+
+## Absorb a specific object lying on the ground.
+func take_pickup(object_id: String, task_id: String) -> Dictionary:
+	var r := absorb(task_id)
+	if r.ok:
+		taken[object_id] = true
+		carried_pickup = object_id
+	return r
+
+
+## Spit out what Slayme carries: a pickup goes back on the ground.
+func put_back() -> void:
+	if carried_pickup != "":
+		taken.erase(carried_pickup)
+	set_carried("", "")
+
+
+## Release into a one-item sink (e.g. one patch of grass).
+func fill_slot(object_id: String, task_id: String) -> Dictionary:
+	if filled.has(object_id):
+		return {"ok": false, "msg": "msg.task_already_done"}
+	var r := release(task_id)
+	if r.ok:
+		filled[object_id] = true
+	return r
+
+
+## Undo a finished job (heroes passing by), with its pickups back on the ground.
+func reset_task(task_id: String, pickup_ids: Array) -> void:
+	var t := task(task_id)
+	if t.is_empty():
+		return
+	t.progress = 0
+	for id in pickup_ids:
+		taken.erase(id)
+	task_progress.emit(task_id, 0, t.amount)
 
 
 ## An incident: what Slayme carried is lost and (rule) the task goes back.
 func on_incident() -> void:
 	incidents += 1
+	if carried_pickup != "":
+		taken.erase(carried_pickup)  # the shard is back where it was
 	if carried_from != "" and Rules.flag("incident.reset_task_progress", true) and tasks.has(carried_from):
 		var t: Dictionary = tasks[carried_from]
 		if t.progress < t.amount:
