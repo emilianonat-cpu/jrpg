@@ -365,6 +365,18 @@
 		"bell": {
 			"file": "bell.wav"
 		},
+		"bell_open": {
+			"file": "bell_open.wav"
+		},
+		"bell_heroes": {
+			"file": "bell_heroes.wav"
+		},
+		"bell_incident": {
+			"file": "bell_incident.wav"
+		},
+		"bell_close": {
+			"file": "bell_close.wav"
+		},
 		"fanfare": {
 			"file": "fanfare.wav"
 		},

@@ -213,5 +213,12 @@
 				20000
 			]
 		}
+	},
+	"bells": {
+		"_comment": "One factory bell, four rhythms: open (shift starts, short), heroes (visitors coming, two rings), incident (sharp, loud, heard everywhere), close (end of shift, long). Ids in the art pack; missing = the plain bell.",
+		"open": "bell_open",
+		"heroes": "bell_heroes",
+		"incident": "bell_incident",
+		"close": "bell_close"
 	}
 }

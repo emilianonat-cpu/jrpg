@@ -1,5 +1,5 @@
 {
-	"_comment": "Daily variations, cycling. Every day is the same day, slightly different. incidents = the day's planned incidents (screens mode): the board's number is their count. who=colleague means Gig, unless he was warned. defaults apply to all days.",
+	"_comment": "Daily variations, cycling. Every day is the same day, slightly different. incidents = the day's planned incidents (screens mode): the board's number is their count. who=colleague means Gig, unless he was warned. defaults apply to all days. board_notes = Novecento's note on the Board, by how many times the pot was broken again (all days).",
 	"defaults": {
 		"party": [
 			"hero_sword",
@@ -109,5 +109,11 @@
 			],
 			"bit_line": "dlg.kid.play_3"
 		}
-	]
+	],
+	"board_notes": {
+		"0": "board.note.default",
+		"1": "board.note.pot_1",
+		"3": "board.note.pot_2",
+		"6": "board.note.pot_3"
+	}
 }

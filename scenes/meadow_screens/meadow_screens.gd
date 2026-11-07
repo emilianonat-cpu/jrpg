@@ -292,6 +292,17 @@ func _prompt_for(o: WorldObject) -> String:
 			"p": t.get("progress", 0), "a": t.get("amount", 0),
 			"title": Content.text(str(t.def.get("title", "")))}
 		var item_id := str(t.def.get("item", ""))
+		var action := _task_action(o, task_id, t, item_id, args)
+		# What it is (state) + what to do: "Broken pot: fit the shard back (1/3)".
+		var label_key := "label.%s.%s" % [o.kind, task_id]
+		if Content.has_text(label_key) and not (o.kind == "sink" and day.is_done(task_id)):
+			return Content.text("prompt.labelled", {"label": Content.text(label_key), "action": action})
+		return action
+	return o.prompt()
+
+
+func _task_action(o: WorldObject, task_id: String, t: Dictionary, item_id: String, args: Dictionary) -> String:
+	if true:
 		if o.kind == "sink":
 			if day.is_done(task_id):
 				return Content.text("prompt.sink_done", args)
@@ -306,7 +317,7 @@ func _prompt_for(o: WorldObject) -> String:
 			return Content.text("prompt.hands_full", args)
 		var take_key := "prompt.take." + item_id
 		return Content.text(take_key if Content.has_text(take_key) else "prompt.absorb_item", args)
-	return o.prompt()
+	return ""
 
 
 # ---- hints: what can be used right now moves a little (affordance) ----------------------
@@ -596,15 +607,41 @@ func _use_board(_o: WorldObject) -> void:
 	var n := planned_incidents()
 	var lines := [{"speaker": "board", "text": str(v.get("board_title", "board.title.1"))},
 		{"speaker": "board", "text": str(v.get("board_notice", "board.notice.default")), "args": {"n": n}}]
-	# Today's work orders: what the visitors left behind, and why it matters (to them).
-	var next := next_hero_pass()
-	var when := Clock.format(next) if next >= 0.0 else Content.text("board.later")
+	# Page 1: today's jobs, with the real count (the same as the objects in the world).
+	var jobs: Array = []
 	for task_id in day.tasks.keys():
-		var key: String = "order." + str(task_id)
-		if Content.has_text(key) and not day.is_done(task_id):
-			lines.append({"speaker": "board", "text": key, "args": {"time": when}})
+		var t := day.task(str(task_id))
+		var key: String = ("board.job_done." if day.is_done(str(task_id)) else "board.job.") + str(task_id)
+		if Content.has_text(key):
+			jobs.append(Content.text(key, {"p": t.get("progress", 0), "a": t.get("amount", 0)}))
+	lines.append({"speaker": "board", "text": "board.jobs", "args": {"list": "\n".join(jobs)}})
+	# Page 2: the timetable (visitors already moved by today's delay; end of shift).
+	var visits: Array = []
+	var shift_end := ""
+	for e in Content.dict("schedule").get("events", []):
+		match str(e.get("event", "")):
+			"hero_pass":
+				visits.append(Clock.format(_event_time(e)))
+			"bell_evening":
+				shift_end = Clock.format(_event_time(e))
+	lines.append({"speaker": "board", "text": "board.schedule", "args": {"visits": ", ".join(visits), "end": shift_end}})
+	# Page 3: a note from Novecento. It changes with what keeps happening.
+	lines.append({"speaker": "board", "text": _board_note()})
 	lines.append({"speaker": "board", "text": "board.footer"})
 	await say(lines)
+
+
+## Novecento's note on the Board: the more the pot breaks, the stranger the note.
+func _board_note() -> String:
+	var broken := int(GameState.stats.get("pots_broken", 0))
+	var best := "board.note.default"
+	var best_at := -1
+	var notes: Dictionary = Content.dict("days").get("board_notes", {})
+	for at in notes.keys():
+		if broken >= int(at) and int(at) > best_at:
+			best_at = int(at)
+			best = str(notes[at])
+	return best
 
 
 func _use_npc(o: WorldObject) -> void:
@@ -630,13 +667,34 @@ func _talk_mentor(file: String, count: int) -> void:
 		Hooks.emit("prototype.end", {})
 		go("end", {"bells": int(GameState.stats.get("bells", 0))})
 		return
+	var lines: Array
 	if count == 0:
 		var key := "greeting_step_%d_day_%d" % [step, day.day]
 		if not Content.has_dialogue(file, key):
 			key = "greeting_step_%d" % step
-		await say(Content.dialogue(file, key))
+		lines = Content.dialogue(file, key)
 	else:
-		await say(Content.dialogue(file, "idle_step_%d" % step, count - 1 + day.day))
+		lines = Content.dialogue(file, "idle_step_%d" % step, count - 1 + day.day)
+	# Once a day, Novecento mentions something that really happened.
+	var react := _mentor_reaction()
+	if react != "":
+		day.flags["mentor_reacted"] = true
+		lines = lines + [{"speaker": "mentor", "text": react}]
+	await say(lines)
+
+
+func _mentor_reaction() -> String:
+	if day.flags.get("mentor_reacted", false):
+		return ""
+	if day.flags.get("colleague_hurt", false):
+		return "dlg.mentor.react_gig_hurt"
+	if day.flags.get("colleague_warned", false):
+		return "dlg.mentor.react_gig_warned"
+	if day.flags.get("pot_rebroken", false):
+		var n := int(GameState.stats.get("pots_broken", 0))
+		var key := "dlg.mentor.react_pot_%d" % mini(n, 3)
+		return key if Content.has_text(key) else ""
+	return ""
 
 
 func _talk_colleague(o: WorldObject, file: String, count: int) -> void:
@@ -735,12 +793,12 @@ func _flush_pending() -> void:
 
 
 func _ev_bell_morning() -> void:
-	_ring()
+	_ring("open")
 	await say(Content.dialogue("world", "bell_morning"))
 
 
 func _ev_bell_evening() -> void:
-	Art.play_sound("bell")
+	_ring("close")
 	day.flags["shift_over"] = true
 	await say(Content.dialogue("world", "bell_evening"))
 
@@ -750,9 +808,11 @@ func _ev_day_end() -> void:
 	go_home()
 
 
-## The bell: morning, incidents, evening. Always the same bell.
-func _ring() -> void:
-	Art.play_sound("bell")
+## The bell: one bell, four rhythms you can tell apart without looking
+## (rules.json "bells": open, heroes, incident, close).
+func _ring(kind: String = "incident") -> void:
+	var id := Rules.text("bells." + kind, "bell")
+	Art.play_sound(id if Art.sound(id) != null else "bell")
 
 
 # ---- incidents in the background (the quota) ----------------------------------------------
@@ -821,7 +881,7 @@ func _update_passes(_prev: float, now: float) -> void:
 			if loc == location_id and not p.warned.has(loc) and t < float(seg.offset) and float(seg.offset) - t <= warn:
 				p.warned[loc] = true
 				hud.toast(Content.text("world.heroes_coming_toast"))
-				Art.play_sound("footsteps")
+				_ring("heroes")
 			if t >= float(seg.offset) and not p.entered.has(loc):
 				p.entered[loc] = true
 				_heroes_enter(p, seg)
@@ -833,7 +893,7 @@ func _update_passes(_prev: float, now: float) -> void:
 		if str(first.location) == location_id and not day.flags.has(key):
 			day.flags[key] = true
 			hud.toast(Content.text("world.heroes_coming_toast"))
-			Art.play_sound("footsteps")
+			_ring("heroes")
 	passes = passes.filter(func(p): return now - float(p.start) < _route_length())
 
 

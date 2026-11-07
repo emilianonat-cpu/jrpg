@@ -422,6 +422,26 @@ for i in range(n):
 bell = seq([bell, mix(drum(90, 0.18, 0.8, 0.3), noise(0.05, 0.4, 60, 0.6))], 1.05)
 snd("bell", bell)
 
+
+def factory_bell(dur, hammer=21, base=1180, vol=0.32, tail=0.2):
+    """The same electric bell, any length: hammer on a metal gong, then a short fade."""
+    out = []
+    for i in range(int(rate * (dur + tail))):
+        t = i / rate
+        ham = 0.55 + 0.45 * math.sin(2 * math.pi * hammer * t)
+        tone = math.sin(2 * math.pi * base * t) + 0.6 * math.sin(2 * math.pi * base * 2.3 * t) + 0.35 * math.sin(2 * math.pi * base * 3.75 * t)
+        fade = 1.0 if t < dur else max(0.0, 1 - (t - dur) / tail)
+        out.append(vol * ham * tone * fade)
+    return out
+
+
+# Four rhythms of one bell, told apart by ear (rules.json "bells").
+snd("bell_open", factory_bell(0.35))                                                   # shift opens: short
+snd("bell_heroes", seq([factory_bell(0.25, base=1400), factory_bell(0.25, base=1400)], 0.45))  # visitors: two rings
+snd("bell_incident", mix(factory_bell(0.6, hammer=32, base=980, vol=0.5, tail=0.05), drum(70, 0.3, 0.9, 0.3)))  # sharp, loud
+snd("bell_close", seq([factory_bell(1.6, hammer=14, base=1040, vol=0.28, tail=0.8),
+                       mix(drum(90, 0.18, 0.8, 0.3), noise(0.05, 0.4, 60, 0.6))], 2.3))  # long, warm, the time clock
+
 snd("fanfare", seq([square(N["G4"], 0.12), square(N["C5"], 0.12), square(N["E5"], 0.12), square(N["G5"], 0.4, decay=2)], 0.11))
 snd("hit", mix(drum(140, 0.2, 0.8), noise(0.08, 0.5, 40, 0.2)))
 
